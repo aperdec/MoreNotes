@@ -42,7 +42,7 @@ public class MyArrayAdapter extends ArrayAdapter<Note> {
 
         int noteResourceId = notes.get(position).getId();
 
-        imgNote.setImageResource(noteResourceId);
+//        imgNote.setImageResource(noteResourceId);
 
         TextView txtnote = (TextView) convertView.findViewById(R.id.txtTitle);
         // set the text
