@@ -39,7 +39,7 @@ public class Note implements Parcelable {
         category = in.readString();
         text = in.readString();
         location = in.readString();
-        dateCreated = in.readParcelable(Date.class.getClassLoader());
+        dateCreated = in.readString();
         picture = in.readParcelable(Bitmap.class.getClassLoader());
         audio = in.readParcelable(MediaStore.Audio.Media.class.getClassLoader());
     }
@@ -132,7 +132,7 @@ public class Note implements Parcelable {
         dest.writeString(category);
         dest.writeString(text);
         dest.writeString(location);
-        dest.writeValue(dateCreated);
+        dest.writeString(dateCreated);
         dest.writeValue(picture);
         dest.writeValue(audio);
     }

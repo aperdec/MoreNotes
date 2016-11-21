@@ -38,7 +38,7 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/txtTitle"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:hint="Input Title Here"
             android:editable="false"
             android:textAlignment="center" />
@@ -55,15 +55,18 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/lblCategory"
-            android:layout_weight="1"
+            android:layout_weight="0.82"
             android:textSize="18sp"
             android:textAllCaps="false" />
 
-        <Spinner
-            android:layout_width="179dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/spinner2"
-            android:layout_weight="0.51" />
+            android:id="@+id/txtCategory"
+            android:layout_weight="2.47"
+            android:textSize="18sp"
+            android:textAllCaps="false" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -107,7 +110,7 @@
                         android:layout_width="136dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/lblLocation"
-                        tools:text="Location:"
+                        tools:text="Location Coordinates:"
                         android:textSize="20sp" />
 
                     <TextView
@@ -125,11 +128,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Date Created"
+                        android:text="Date Created:"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/lblDateCreated"
-                        android:layout_weight="0.18"
+                        android:layout_weight="0.11"
                         android:textSize="20sp" />
 
                     <TextView
@@ -137,7 +140,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtDate"
-                        android:layout_weight="1"
+                        android:layout_weight="1.08"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -152,14 +155,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/btnDel"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:onClick="delNote"/>
 
                     <Button
                         android:text="Edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/btnEdit"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:onClick="editNote"/>
                 </LinearLayout>
 
             </LinearLayout>
