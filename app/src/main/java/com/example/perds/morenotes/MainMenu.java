@@ -24,6 +24,8 @@ public class MainMenu extends AppCompatActivity {
 
     private ListView lstNotes;
 
+    private List<Note> notes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class MainMenu extends AppCompatActivity {
 
         SharedPreferences settings = getSharedPreferences(NOTE_PREFS, MODE_PRIVATE);
         if (settings.contains(SETTINGS_PREFS_NOTES)) {
-            List<Note> notes = new ArrayList<>();
+
 
             MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
 
