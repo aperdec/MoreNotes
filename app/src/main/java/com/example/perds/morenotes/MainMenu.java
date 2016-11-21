@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
 
@@ -24,6 +25,7 @@ public class MainMenu extends AppCompatActivity {
 
     private static final String NOTE_PREFS = "NotePrefs";
     private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+
 
     private ListView lstNotes;
 
