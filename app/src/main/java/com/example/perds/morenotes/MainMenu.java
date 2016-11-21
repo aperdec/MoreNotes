@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 
@@ -25,6 +26,8 @@ public class MainMenu extends AppCompatActivity {
 
     private static final String NOTE_PREFS = "NotePrefs";
     private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+    private static final int EDIT_NOTE = 1;
+    private static final int VIEW_NOTE = 2;
 
 
     private ListView lstNotes;
@@ -37,8 +40,8 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         notes = new ArrayList<>();
-        notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", new Date(), null, null));
-        notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", new Date(), null, null));
+        notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
+        notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,7 +64,7 @@ public class MainMenu extends AppCompatActivity {
                                                 Intent intent = new Intent();
                                                 intent.setClass(parent.getContext(), ViewNote.class);
                                                 intent.putExtra("note", notes.get(position));
-                                                startActivity(intent);
+                                                startActivityForResult(intent, VIEW_NOTE);
                                             }
                                         }
         );
@@ -98,6 +101,20 @@ public class MainMenu extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VIEW_NOTE) {
+
+            if (resultCode == RESULT_CANCELED) {
+                Note n = data.getParcelableExtra("note");
+            } else {
+
+            }
+        }
     }
 
     public void testing() {
