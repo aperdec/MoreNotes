@@ -18,11 +18,11 @@ public class Note implements Parcelable {
     private String category;
     private String text;
     private String location;
-    private Date dateCreated;
+    private String dateCreated;
     private Bitmap picture;
     private MediaStore.Audio.Media audio;
 
-    public Note(int id, String title, String category, String text, String location, Date dateCreated, Bitmap picture, MediaStore.Audio.Media audio) {
+    public Note(int id, String title, String category, String text, String location, String dateCreated, Bitmap picture, MediaStore.Audio.Media audio) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -96,11 +96,11 @@ public class Note implements Parcelable {
         this.location = location;
     }
 
-    public Date getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
