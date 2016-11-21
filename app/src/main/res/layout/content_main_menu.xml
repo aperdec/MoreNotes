@@ -13,10 +13,9 @@
     tools:context="com.example.perds.morenotes.MainMenu"
     tools:showIn="@layout/activity_main_menu">
 
-    <fragment android:name="com.example.perds.morenotes.NoteInList"
-        android:id="@+id/headlines_fragment"
+    <ListView
+        android:id="@+id/lstNotes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout="@layout/fragment_note__in__list" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
