@@ -1,20 +1,27 @@
 package com.example.perds.morenotes;
 
+import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.perds.morenotes.beans.Note;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity {
@@ -31,7 +38,10 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        lstNotes = (ListView) findViewById(R.id.lstNotes);
+        notes = new ArrayList<>();
+        notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", new Date(), null, null));
+        notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", new Date(), null, null));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,15 +54,28 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        lstNotes = (ListView) findViewById(R.id.lstNotes);
+        lstNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                Log.i("Here", "Replace with intent. Position:" + position + " Id" + id);
+                                                Log.i("Sending", "Sending this note: " + notes.get(position).getTitle());
+                                                Intent intent = new Intent();
+                                                intent.setClass(parent.getContext(), ViewNote.class);
+                                                intent.putExtra("note", notes.get(position));
+                                                startActivity(intent);
+                                            }
+                                        }
+        );
+
         SharedPreferences settings = getSharedPreferences(NOTE_PREFS, MODE_PRIVATE);
         if (settings.contains(SETTINGS_PREFS_NOTES)) {
-
-
             MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
 
             lstNotes.setAdapter(myArrayAdapter);
         } else {
+            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
 
+            lstNotes.setAdapter(myArrayAdapter);
         }
     }
 
