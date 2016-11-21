@@ -1,5 +1,6 @@
 package com.example.perds.morenotes;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
             }
         });
 
@@ -76,5 +78,11 @@ public class MainMenu extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void testing(){
+        Intent intent = new Intent(MainMenu.this,NoteEditing.class );
+       // MainMenu.this.startActivity(intent);
+        startActivity(intent);
     }
 }
