@@ -10,6 +10,7 @@ import java.util.Date;
 public class Note {
 
     private int id;
+    private String title;
     private String category;
     private String text;
     private String location;
@@ -23,6 +24,14 @@ public class Note {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getCategory() {

@@ -1,5 +1,7 @@
 package com.example.perds.morenotes;
 
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,13 +10,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.example.perds.morenotes.beans.Note;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenu extends AppCompatActivity {
+
+    private static final String NOTE_PREFS = "NotePrefs";
+    private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+
+    private ListView lstNotes;
+
+    private List<Note> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        lstNotes = (ListView) findViewById(R.id.lstNotes);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,6 +43,17 @@ public class MainMenu extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        SharedPreferences settings = getSharedPreferences(NOTE_PREFS, MODE_PRIVATE);
+        if (settings.contains(SETTINGS_PREFS_NOTES)) {
+
+
+            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+
+            lstNotes.setAdapter(myArrayAdapter);
+        } else {
+
+        }
     }
 
     @Override
