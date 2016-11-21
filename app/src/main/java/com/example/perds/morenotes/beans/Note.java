@@ -1,3 +1,5 @@
+package com.example.perds.morenotes.beans;
+
 import java.sql.Blob;
 import java.util.Date;
 
