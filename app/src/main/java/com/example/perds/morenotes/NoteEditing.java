@@ -1,31 +1,38 @@
 package com.example.perds.morenotes;
 
+import android.*;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class NoteEditing extends AppCompatActivity {
 
     private final static int CONNECTION_FAILURE_REQUEST = 9000;
     private TextView addressTextView;
     private static final String CAM_PREF = "";
-    static final int TAKE_AVATAR_CAMERA_REQUEST = 1;
+    static final int TAKE_AVATAR_CAMERA_REQUEST = 10;
     static final int CAPTURE_IMAGE_ACTIVITY = 5;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 30;
     private static final String SETTINGS_PREFS_AVATAR = "";
 
     @Override
@@ -58,57 +65,51 @@ public class NoteEditing extends AppCompatActivity {
 
     //camera code
     public void onClickCam(View v) {
-        String path = Environment.getExternalStorageDirectory() + "/photo1.jpg";
-        File file = new File(path);
-        Uri outputFileUri = Uri.fromFile(file);
-        Intent intent = new Intent(
-                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY);
-/*
-        //Intent pic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Intent camera= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri uriSavedImage=Uri.fromFile(new File("/sdcard/flashCropped.png"));
-        camera.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    android.Manifest.permission.CAMERA, true);
+        } else {
+            // Access to the location has been granted to the app.
+            /*
+            String path = Environment.getExternalStorageDirectory() + "/photo1.jpg";
+            File file = new File(path);
+            Uri outputFileUri = Uri.fromFile(file);
+            Intent intent = new Intent(
+                    android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);*/
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY);
+        }
 
-        startActivityForResult(Intent.createChooser(camera, "Take your photo!"), TAKE_AVATAR_CAMERA_REQUEST);
-    */
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
     }
 
     //takes the response from the camera -- if working the result will have an img
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.gc();
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY) {
-            if (resultCode == Activity.RESULT_OK) {
 
-                /*try {
-                    // Call function MakeFolder to create folder structure if
-                    // its not created
-                    if(imageBitmap != null) {
-                        imageBitmap = null;
-                        imageBitmap.recycle();
-                    }
-                    MakeFolder();
-                    // Get file from temp1 file where image has been stored
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 3;
-                    imageBitmap = BitmapFactory.decodeFile(path, options);
-                    imgForPhotograph.setImageBitmap(imageBitmap);
-                    isImageTaken = true;
-                    // Name for image
-                    IMAGEPATH = getString(R.string.chassisImage)
-                            + System.currentTimeMillis();
-                    SaveImageFile(imageBitmap,IMAGEPATH);
-                } catch (Exception e) {
-                    Toast.makeText(this, "Picture Not taken",
-                            Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                } */
-            }
-        }
-    }
-
-    /*
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         switch(requestCode){
             case TAKE_AVATAR_CAMERA_REQUEST:
@@ -124,12 +125,14 @@ public class NoteEditing extends AppCompatActivity {
         if (camPic != null){
             try{
                 System.out.print("camera working");
-                //saveAva(camPic);
+                String filePath = saveToInternalStorage(camPic);
+                Log.i("file saved",filePath + " it worked");
             } catch (Exception e){
                 //save didn't work
+                Log.i("fail","failure");
             }
         }
-    } */
+    }
 
 /*
     private void saveAva(Bitmap ava){
