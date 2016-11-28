@@ -63,7 +63,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                onStart();
+                    connect();
 
             }
         });
@@ -162,10 +162,19 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onStart() {
         super.onStart();
+        //connect();
+
+
+        //startActivity(intent);
+     //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void connect(){
         googleApiClient.connect();
 
-     //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
     }
+
 
     @Override
     public void onStop() {
@@ -174,16 +183,10 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    public void onConnected(Bundle bundle) {
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         Intent intent = new Intent(MainMenu.this, NoteEditing.class);
