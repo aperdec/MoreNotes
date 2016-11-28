@@ -13,9 +13,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.vision.text.Text;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.R.attr.duration;
@@ -37,6 +40,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
     private static final String NOTE_PREFS = "NotePrefs";
     private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+    private static final int EDIT_NOTE = 1;
+    private static final int VIEW_NOTE = 2;
+
 
 
     private GoogleApiClient googleApiClient;
@@ -53,7 +59,10 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        lstNotes = (ListView) findViewById(R.id.lstNotes);
+        notes = new ArrayList<>();
+        notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
+        notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = new Intent(MainMenu.this, NoteEditing.class);
@@ -70,15 +79,28 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             }
         });
 
+        lstNotes = (ListView) findViewById(R.id.lstNotes);
+        lstNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                Log.i("Here", "Replace with intent. Position:" + position + " Id" + id);
+                                                Log.i("Sending", "Sending this note: " + notes.get(position).getTitle());
+                                                Intent intent = new Intent();
+                                                intent.setClass(parent.getContext(), ViewNote.class);
+                                                intent.putExtra("note", notes.get(position));
+                                                startActivityForResult(intent, VIEW_NOTE);
+                                            }
+                                        }
+        );
+
         SharedPreferences settings = getSharedPreferences(NOTE_PREFS, MODE_PRIVATE);
         if (settings.contains(SETTINGS_PREFS_NOTES)) {
-
-
             MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
 
             lstNotes.setAdapter(myArrayAdapter);
         } else {
+            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
 
+            lstNotes.setAdapter(myArrayAdapter);
         }
         //get address stuff
        // addressTextView = (TextView) findViewById(R.id.txtLocation);
@@ -111,6 +133,20 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VIEW_NOTE) {
+
+            if (resultCode == RESULT_CANCELED) {
+                Note n = data.getParcelableExtra("note");
+            } else {
+
+            }
+        }
+    }
+
     public void testing() {
         //get address
 
@@ -119,8 +155,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         // MainMenu.this.startActivity(intent);
 
         onStart();
-
-
     }
 
     @Override
@@ -172,7 +206,4 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-
-
 }

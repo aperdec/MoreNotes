@@ -43,28 +43,6 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lblLocation"
-                tools:text="Location:"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtLocation"
-                android:hint="Location Display Here"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
             android:layout_height="21dp"
             android:layout_weight="0.10">
 
@@ -96,8 +74,9 @@
                 android:ems="10"
                 android:id="@+id/txtMessege"
                 android:hint="Type Message Here"
-                android:layout_weight="1.16"
+                android:layout_weight="1.44"
                 android:layout_height="match_parent" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -106,6 +85,28 @@
             android:layout_height="2dp"
             android:layout_width="wrap_content">
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.16">
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblLocation"
+                    tools:text="Location:"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtLocation"
+                    android:hint="Location Display Here"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

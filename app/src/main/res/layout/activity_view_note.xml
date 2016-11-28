@@ -10,4 +10,166 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.perds.morenotes.ViewNote">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+            android:weightSum="1">
+
+        <TextView
+            android:text="Title:"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:id="@+id/lblTitle"
+            android:textSize="24sp"
+            android:layout_weight="1.10" />
+
+        <TextView
+            android:layout_width="211dp"
+            android:layout_height="match_parent"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/txtTitle"
+            android:textSize="24sp"
+            android:hint="Input Title Here"
+            android:editable="false"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="21dp"
+        android:layout_weight="0.10">
+
+        <TextView
+            android:text="Category:"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/lblCategory"
+            android:layout_weight="0.82"
+            android:textSize="18sp"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/txtCategory"
+            android:layout_weight="2.47"
+            android:textSize="18sp"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:layout_weight="0.52"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/txtMessege"
+            android:hint="Type Message Here"
+            android:layout_weight="1.44"
+            android:layout_height="match_parent"
+            android:editable="false"
+            />
+
+    </LinearLayout>
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="0.38"
+        android:layout_height="2dp"
+        android:layout_width="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="362dp"
+                    android:layout_height="48dp">
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="136dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblLocation"
+                        tools:text="Location Coordinates:"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtLocation"
+                        android:hint="Location Display Here"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Date Created:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblDateCreated"
+                        android:layout_weight="0.11"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtDate"
+                        android:layout_weight="1.08"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.16">
+
+                    <Button
+                        android:text="Delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnDel"
+                        android:layout_weight="1"
+                        android:onClick="delNote"/>
+
+                    <Button
+                        android:text="Edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnEdit"
+                        android:layout_weight="1"
+                        android:onClick="editNote"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>
