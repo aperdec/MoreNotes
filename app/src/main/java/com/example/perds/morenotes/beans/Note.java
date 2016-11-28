@@ -19,10 +19,10 @@ public class Note implements Parcelable {
     private String text;
     private String location;
     private String dateCreated;
-    private Bitmap picture;
-    private MediaStore.Audio.Media audio;
+    private String picture;
+    private String audio;
 
-    public Note(int id, String title, String category, String text, String location, String dateCreated, Bitmap picture, MediaStore.Audio.Media audio) {
+    public Note(int id, String title, String category, String text, String location, String dateCreated, String picture, String audio) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -104,19 +104,19 @@ public class Note implements Parcelable {
         this.dateCreated = dateCreated;
     }
 
-    public Bitmap getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Bitmap picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
-    public MediaStore.Audio.Media getAudio() {
+    public String getAudio() {
         return audio;
     }
 
-    public void setAudio(MediaStore.Audio.Media audio) {
+    public void setAudio(String audio) {
         this.audio = audio;
     }
 

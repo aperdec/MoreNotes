@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,22 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.text.Text;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static android.R.attr.duration;
-import static com.example.perds.morenotes.R.id.text;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -145,16 +136,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             }
         }
-    }
-
-    public void testing() {
-        //get address
-
-        //pass with intent
-
-        // MainMenu.this.startActivity(intent);
-
-        onStart();
     }
 
     @Override
