@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.Manifest;
+import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 import com.example.perds.morenotes.beans.NotesDB;
@@ -36,7 +37,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    private GoogleApiClient googleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     private ListView lstNotes;
 
@@ -105,12 +106,16 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         //get address stuff
        // addressTextView = (TextView) findViewById(R.id.txtLocation);
-        googleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+                connect();
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,6 +183,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
+            //enable my location here *****************************************
         }
 
 
@@ -219,26 +225,40 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     }
 
     public void connect(){
-        googleApiClient.connect();
+
+        mGoogleApiClient.connect();
+
+        if (mGoogleApiClient.isConnecting()==true){
+           Toast.makeText(getApplicationContext(),"connecting",Toast.LENGTH_LONG).show();
+        } else if (mGoogleApiClient.isConnected()==true) {
+            Toast.makeText(getApplicationContext(),"connected",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),"not connected",Toast.LENGTH_LONG).show();
+        }
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
 
+      //  Toast.makeText(getApplicationContext(),"ITS GOING IN ON CONNECTED",Toast.LENGTH_LONG).show();
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+         //   Toast.makeText(getApplicationContext(),"Onconnected Permisison Deny",Toast.LENGTH_LONG).show();
 
             return;
         }
+
         Intent intent = new Intent(MainMenu.this, NoteEditing.class);
         Location location = LocationServices.FusedLocationApi
-                .getLastLocation(googleApiClient);
+                .getLastLocation(mGoogleApiClient);
 
         if (location != null){
             lat = location.getLatitude();
@@ -246,6 +266,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             intent.putExtra("latitude", lat);
             intent.putExtra("longitude", lng);
             startActivity(intent);
+            Toast.makeText(getApplicationContext(),location.toString(),Toast.LENGTH_LONG).show();
         }
     }
 
