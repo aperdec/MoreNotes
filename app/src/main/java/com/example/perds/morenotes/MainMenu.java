@@ -54,7 +54,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        intent = new Intent(MainMenu.this, NoteEditing.class);
+        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
