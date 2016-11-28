@@ -2,12 +2,14 @@ package com.example.perds.morenotes.beans;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -112,5 +114,88 @@ public class NotesDB {
 
         // Close the database
         database.close();
+    }
+
+    public ArrayList<Note> updateNoteByName(String name, Note note) {
+
+        database = openHelper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(NAME, note.getName());
+        cv.put(EMAIL, note.getEmail());
+        cv.put(FULL_TIME, note.isFullTime() ? 1 : 0);
+
+        database.update(NOTES_TABLE, cv, "name = ?", new String[]{name});
+
+        database.close();
+
+        return getAllNotes();
+
+    }
+
+    public ArrayList<Note> getAllNotes() {
+
+        database = openHelper.getReadableDatabase();
+
+        Cursor cursor = database.query(NOTES_TABLE, null, null, null, null, null, NAME);
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(NAME_COLUMN);
+            String email = cursor.getString(EMAIL_COLUMN);
+            boolean fullTime = cursor.getInt(FULL_TIME_COLUMN) == 1;
+            long dbId = cursor.getLong(ID_COLUMN);
+
+            notes.add(new Note(name, email, fullTime, dbId));
+        }
+
+        database.close();
+
+        return notes;
+    }
+
+    public ArrayList<Note> getNotesByName(String name) {
+
+        database = openHelper.getReadableDatabase();
+
+        Cursor cursor = database.query(NOTES_TABLE, null, "name = ?", new String[]{name}, null, null, NAME);
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            String email = cursor.getString(EMAIL_COLUMN);
+            boolean fullTime = cursor.getInt(FULL_TIME_COLUMN) == 1;
+            long dbId = cursor.getLong(ID_COLUMN);
+
+            notes.add(new Note(name, email, fullTime, dbId));
+        }
+
+        database.close();
+
+        return notes;
+    }
+
+    public int deleteAllNotes() {
+
+        database = openHelper.getWritableDatabase();
+
+        int amountDeleted = database.delete(NOTES_TABLE, "1", null);
+
+        database.close();
+
+        return amountDeleted;
+    }
+
+    public int deleteNotesByName(String name) {
+
+        database = openHelper.getWritableDatabase();
+
+        int amountDeleted = database.delete(NOTES_TABLE, "name = ?", new String[]{name});
+
+        database.close();
+
+        return amountDeleted;
     }
 }
