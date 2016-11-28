@@ -124,7 +124,8 @@
                 android:text="Picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnTakePic" />
+                android:id="@+id/btnTakePic"
+                android:onClick="onClickCam"/>
 
             <Button
                 android:text="Messege"
