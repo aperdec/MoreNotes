@@ -2,13 +2,11 @@ package com.example.perds.morenotes.beans;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.provider.MediaStore;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Date;
+import java.util.ArrayList;
 
 /**
  * Created by Perds on 11/21/2016.
@@ -93,9 +91,26 @@ public class NotesDB {
     public void saveNote(Note note) {
         database = openHelper.getWritableDatabase();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        note.getPicture().compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ID, note.getId());
+        cv.put(TITLE, note.getTitle());
+        cv.put(CATEGORY, note.getCategory());
+        cv.put(TEXT, note.getText());
+        cv.put(LOCATION, note.getLocation());
+        cv.put(DATE_CREATED, note.getDateCreated());
+        cv.put(PICTURE, note.getPicture());
+        cv.put(AUDIO, note.getAudio());
+
+        database.insert(NOTES_TABLE, null, cv);
+
+        // Close the database
+        database.close();
+    }
+
+    public ArrayList<Note> updateNoteById(Note note) {
+
+        database = openHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 
@@ -105,12 +120,62 @@ public class NotesDB {
         cv.put(TEXT, note.getText());
         cv.put(LOCATION, note.getLocation());
         cv.put(DATE_CREATED, note.getDateCreated());
-        cv.put(PICTURE, byteArray);
-        cv.put(AUDIO, note.getDateCreated());
+        cv.put(PICTURE, note.getPicture());
+        cv.put(AUDIO, note.getAudio());
 
-        database.insert(NOTES_TABLE, null, cv);
+        database.update(NOTES_TABLE, cv, "id = ?", new String[]{String.valueOf(note.getId())});
 
-        // Close the database
         database.close();
+
+        return getAllNotes();
+
+    }
+
+    public ArrayList<Note> getAllNotes() {
+
+        database = openHelper.getReadableDatabase();
+
+        Cursor cursor = database.query(NOTES_TABLE, null, null, null, null, null, ID);
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(ID_COLUMN);
+            String title = cursor.getString(TITLE_COLUMN);
+            String category = cursor.getString(CATEGORY_COLUMN);
+            String text = cursor.getString(TEXT_COLUMN);
+            String location = cursor.getString(LOCATION_COLUMN);
+            String dateCreated = cursor.getString(DATE_CREATED_COLUMN);
+            String picture = cursor.getString(PICTURE_COLUMN);
+            String audio = cursor.getString(AUDIO_COLUMN);
+
+            notes.add(new Note(id, title, category, text, location, dateCreated, picture, audio));
+        }
+
+        database.close();
+
+        return notes;
+    }
+
+    public int deleteAllNotes() {
+
+        database = openHelper.getWritableDatabase();
+
+        int amountDeleted = database.delete(NOTES_TABLE, "1", null);
+
+        database.close();
+
+        return amountDeleted;
+    }
+
+    public int deleteNotesById(int id) {
+
+        database = openHelper.getWritableDatabase();
+
+        int amountDeleted = database.delete(NOTES_TABLE, "id = ?", new String[]{String.valueOf(id)});
+
+        database.close();
+
+        return amountDeleted;
     }
 }

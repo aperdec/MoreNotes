@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,39 +18,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
+import com.example.perds.morenotes.beans.NotesDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.text.Text;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static android.R.attr.duration;
-import static com.example.perds.morenotes.R.id.text;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String NOTE_PREFS = "NotePrefs";
-    private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
-    private static final int EDIT_NOTE = 1;
-    private static final int VIEW_NOTE = 2;
-
-    private Intent intent;
-
+    private static final String NOTE_PREFS = "NotePrefs", SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+    private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
 
     private GoogleApiClient googleApiClient;
-
 
     private ListView lstNotes;
 
     private List<Note> notes;
+    private NotesDB notesDB;
 
     double lat, lng = 0.0;
 
@@ -60,6 +47,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        notesDB = new NotesDB(this);
         notes = new ArrayList<>();
         notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
         notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
@@ -103,6 +91,12 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             lstNotes.setAdapter(myArrayAdapter);
         }
+
+        // This is to load the database
+//        notes = notesDB.getAllNotes();
+//        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+//        lstNotes.setAdapter(myArrayAdapter);
+
         //get address stuff
        // addressTextView = (TextView) findViewById(R.id.txtLocation);
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -140,22 +134,29 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         if (requestCode == VIEW_NOTE) {
 
-            if (resultCode == RESULT_CANCELED) {
-                Note n = data.getParcelableExtra("note");
+            if (resultCode == RESULT_OK) {
+                String action = data.getStringExtra("action");
+                Note note = data.getParcelableExtra("note");
+                switch (action) {
+                    case "delete" :
+                        Log.i("Delete", "Note " + note.getId() + " is being removed");
+                        notesDB.deleteNotesById(note.getId());
+                        break;
+                    case "save" :
+                        Log.i("Save", "Note " + note.getId() + " is being added");
+                        notesDB.saveNote(note);
+                        break;
+                    case "update" :
+                        Log.i("Update", "Note " + note.getId() + " is being updated");
+                        notesDB.updateNoteById(note);
+                        break;
+                    default:
+                        break;
+                }
             } else {
-
+                Log.i("Canceled", "The activity has returned with a cancel result code");
             }
         }
-    }
-
-    public void testing() {
-        //get address
-
-        //pass with intent
-
-        // MainMenu.this.startActivity(intent);
-
-        onStart();
     }
 
     @Override
