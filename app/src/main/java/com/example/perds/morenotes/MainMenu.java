@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.perds.morenotes.beans.Note;
+import com.example.perds.morenotes.beans.NotesDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -29,19 +30,15 @@ import java.util.List;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String NOTE_PREFS = "NotePrefs";
-    private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
-    private static final int EDIT_NOTE = 1;
-    private static final int VIEW_NOTE = 2;
-
-
+    private static final String NOTE_PREFS = "NotePrefs", SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+    private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
 
     private GoogleApiClient googleApiClient;
-
 
     private ListView lstNotes;
 
     private List<Note> notes;
+    private NotesDB notesDB;
 
     double lat, lng = 0.0;
 
@@ -50,6 +47,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        notesDB = new NotesDB(this);
         notes = new ArrayList<>();
         notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
         notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
@@ -93,6 +91,12 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             lstNotes.setAdapter(myArrayAdapter);
         }
+
+        // This is to load the database
+//        notes = notesDB.getAllNotes();
+//        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+//        lstNotes.setAdapter(myArrayAdapter);
+
         //get address stuff
        // addressTextView = (TextView) findViewById(R.id.txtLocation);
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -130,7 +134,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         if (requestCode == VIEW_NOTE) {
 
-            if (resultCode == RESULT_CANCELED) {
+            if (resultCode == RESULT_OK) {
                 Note n = data.getParcelableExtra("note");
             } else {
 
