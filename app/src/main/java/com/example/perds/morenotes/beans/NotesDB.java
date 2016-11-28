@@ -95,10 +95,6 @@ public class NotesDB {
     public void saveNote(Note note) {
         database = openHelper.getWritableDatabase();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        note.getPicture().compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-
         ContentValues cv = new ContentValues();
 
         cv.put(ID, note.getId());
@@ -107,8 +103,8 @@ public class NotesDB {
         cv.put(TEXT, note.getText());
         cv.put(LOCATION, note.getLocation());
         cv.put(DATE_CREATED, note.getDateCreated());
-        cv.put(PICTURE, byteArray);
-        cv.put(AUDIO, note.getDateCreated());
+        cv.put(PICTURE, note.getPicture());
+        cv.put(AUDIO, note.getAudio());
 
         database.insert(NOTES_TABLE, null, cv);
 
