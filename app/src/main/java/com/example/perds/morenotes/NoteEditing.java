@@ -17,13 +17,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.perds.morenotes.beans.Note;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 public class NoteEditing extends AppCompatActivity {
 
@@ -35,10 +40,26 @@ public class NoteEditing extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 30;
     private static final String SETTINGS_PREFS_AVATAR = "";
 
+    private int id;
+    private EditText edtTitle;
+    private Spinner edtCategory;
+    private EditText edtText;
+    private String location;
+    private String picture;
+    private String audio;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editing);
+
+        //For testing
+        id = 5;
+
+        edtTitle = (EditText) findViewById(R.id.editText);
+        edtCategory = (Spinner) findViewById(R.id.spinner2);
+        edtText = (EditText) findViewById(R.id.txtMessege);
+
 
         // text box
         // location
@@ -125,13 +146,21 @@ public class NoteEditing extends AppCompatActivity {
         if (camPic != null){
             try{
                 System.out.print("camera working");
-                String filePath = saveToInternalStorage(camPic);
-                Log.i("file saved",filePath + " it worked");
+                picture = saveToInternalStorage(camPic);
+                Log.i("file saved",picture + " it worked");
             } catch (Exception e){
                 //save didn't work
                 Log.i("fail","failure");
             }
         }
+    }
+
+    public void saveNote(View view) {
+        Intent intent = new Intent();
+        intent.putExtra("note", new Note(id, edtTitle.getText().toString(), edtCategory.getSelectedItem().toString(), edtText.getText().toString(), location, new Date().toString(), picture, audio));
+        intent.putExtra("action", "update");
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 /*

@@ -128,10 +128,11 @@
                 android:onClick="onClickCam"/>
 
             <Button
-                android:text="Messege"
+                android:text="Save Note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnEditText" />
+                android:id="@+id/btnEditText"
+                android:onClick="saveNote"/>
 
             <Button
                 android:text="Map"
