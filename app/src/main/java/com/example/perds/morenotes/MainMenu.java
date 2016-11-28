@@ -135,9 +135,26 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         if (requestCode == VIEW_NOTE) {
 
             if (resultCode == RESULT_OK) {
-                Note n = data.getParcelableExtra("note");
+                String action = data.getStringExtra("action");
+                Note note = data.getParcelableExtra("note");
+                switch (action) {
+                    case "delete" :
+                        Log.i("Delete", "Note " + note.getId() + " is being removed");
+                        notesDB.deleteNotesById(note.getId());
+                        break;
+                    case "save" :
+                        Log.i("Save", "Note " + note.getId() + " is being added");
+                        notesDB.saveNote(note);
+                        break;
+                    case "update" :
+                        Log.i("Update", "Note " + note.getId() + " is being updated");
+                        notesDB.updateNoteById(note);
+                        break;
+                    default:
+                        break;
+                }
             } else {
-
+                Log.i("Canceled", "The activity has returned with a cancel result code");
             }
         }
     }

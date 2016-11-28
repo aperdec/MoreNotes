@@ -108,7 +108,7 @@ public class NotesDB {
         database.close();
     }
 
-    public ArrayList<Note> updateNoteById(int id, Note note) {
+    public ArrayList<Note> updateNoteById(Note note) {
 
         database = openHelper.getWritableDatabase();
 
@@ -123,7 +123,7 @@ public class NotesDB {
         cv.put(PICTURE, note.getPicture());
         cv.put(AUDIO, note.getAudio());
 
-        database.update(NOTES_TABLE, cv, "id = ?", new String[]{String.valueOf(id)});
+        database.update(NOTES_TABLE, cv, "id = ?", new String[]{String.valueOf(note.getId())});
 
         database.close();
 
