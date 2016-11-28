@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,30 +18,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.Manifest;
 
 import com.example.perds.morenotes.beans.Note;
+import com.example.perds.morenotes.beans.NotesDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String NOTE_PREFS = "NotePrefs";
-    private static final String SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
-    private static final int EDIT_NOTE = 1;
-    private static final int VIEW_NOTE = 2;
-
-
+    private static final String NOTE_PREFS = "NotePrefs", SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
+    private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private GoogleApiClient googleApiClient;
-
 
     private ListView lstNotes;
 
     private List<Note> notes;
+    private NotesDB notesDB;
+    private GoogleMap mMap;
+    private boolean mPermissionDenied = false;
+
 
     double lat, lng = 0.0;
 
@@ -50,6 +53,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        notesDB = new NotesDB(this);
         notes = new ArrayList<>();
         notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
         notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
@@ -65,7 +69,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                onStart();
+                    connect();
 
             }
         });
@@ -93,6 +97,12 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             lstNotes.setAdapter(myArrayAdapter);
         }
+
+        // This is to load the database
+//        notes = notesDB.getAllNotes();
+//        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+//        lstNotes.setAdapter(myArrayAdapter);
+
         //get address stuff
        // addressTextView = (TextView) findViewById(R.id.txtLocation);
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -130,10 +140,27 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         if (requestCode == VIEW_NOTE) {
 
-            if (resultCode == RESULT_CANCELED) {
-                Note n = data.getParcelableExtra("note");
+            if (resultCode == RESULT_OK) {
+                String action = data.getStringExtra("action");
+                Note note = data.getParcelableExtra("note");
+                switch (action) {
+                    case "delete" :
+                        Log.i("Delete", "Note " + note.getId() + " is being removed");
+                        notesDB.deleteNotesById(note.getId());
+                        break;
+                    case "save" :
+                        Log.i("Save", "Note " + note.getId() + " is being added");
+                        notesDB.saveNote(note);
+                        break;
+                    case "update" :
+                        Log.i("Update", "Note " + note.getId() + " is being updated");
+                        notesDB.updateNoteById(note);
+                        break;
+                    default:
+                        break;
+                }
             } else {
-
+                Log.i("Canceled", "The activity has returned with a cancel result code");
             }
         }
     }
@@ -141,9 +168,59 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onStart() {
         super.onStart();
+        //connect();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setMyLocationEnabled(true);
+        }
+
+
+        //startActivity(intent);
+     //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+            return;
+        }
+
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Enable the my location layer if the permission has been granted.
+            enableMyLocation();
+        } else {
+            // Display the missing permission error dialog when the fragments resume.
+            mPermissionDenied = true;
+        }
+    }
+
+    /**
+     * Enables the My Location layer if the fine location permission has been granted.
+     */
+    private void enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setMyLocationEnabled(true);
+        }
+    }
+
+    public void connect(){
         googleApiClient.connect();
 
-     //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -153,16 +230,10 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    public void onConnected(Bundle bundle) {
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         Intent intent = new Intent(MainMenu.this, NoteEditing.class);
