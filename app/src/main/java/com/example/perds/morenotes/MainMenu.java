@@ -75,6 +75,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 newNote.setDateCreated(new Date().toString());
                 newNote.setLocation(getLocation());
                 intent.putExtra("note", newNote);
+                intent.putExtra("action", "save");
                 startActivityForResult(intent, NEW_NOTE);
 
                 connect();
@@ -90,7 +91,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                                                 Intent intent = new Intent();
                                                 intent.setClass(parent.getContext(), ViewNote.class);
                                                 intent.putExtra("note", notes.get(position));
-                                                intent.putExtra("action", "save");
                                                 startActivityForResult(intent, VIEW_NOTE);
                                             }
                                         }
