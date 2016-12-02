@@ -44,7 +44,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         Intent intent = getIntent();
 
-
         double Lat = intent.getDoubleExtra("latitude", 0.0);
         double Lng = intent.getDoubleExtra("longitude", 0.0);
         String testLat = String.valueOf(Lat);
@@ -53,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(Lat, Lng);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
 
     }
 

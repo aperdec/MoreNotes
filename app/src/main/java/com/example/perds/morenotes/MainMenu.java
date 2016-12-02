@@ -38,7 +38,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int NEW_NOTE = 3;
-
+    public String locationStr;
     public static final String TAG = MapsActivity.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
@@ -49,9 +49,8 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private NotesDB notesDB;
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
-    Intent intent;
-    LocationRequest mLocationRequest;
 
+    LocationRequest mLocationRequest;
 
     double lat, lng = 0.0;
 
@@ -59,7 +58,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        locationStr = null;
         notesDB = new NotesDB(this);
         notes = new ArrayList<>();
 
@@ -75,7 +74,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 Note newNote = new Note();
                 newNote.setId(getNoteId());
                 newNote.setDateCreated(new Date().toString());
-                newNote.setLocation(getLocation());
+                newNote.setLocation(locationStr);
                 intent.putExtra("note", newNote);
                 intent.putExtra("action", "save");
                 startActivityForResult(intent, NEW_NOTE);
@@ -122,11 +121,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 .addOnConnectionFailedListener(this)
                 .build();
         connect();
-    }
-
-    private String getLocation() {
-        // TODO add code to return location
-        return null;
     }
 
     public int getNoteId() {
@@ -282,10 +276,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             return;
         }
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
         mGoogleApiClient.connect();
 
@@ -295,12 +285,11 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
-            intent.putExtra("latitude", lat);
-            intent.putExtra("longitude", lng);
-            startActivity(intent);
+            locationStr = String.valueOf(lat) + "," + String.valueOf(lng);
+
             Toast.makeText(getApplicationContext(), location.toString(), Toast.LENGTH_LONG).show();
         } else {
-            handleNewLocation(location);
+            locationStr = "122.0,33.0";
         }
     }
 
@@ -314,7 +303,4 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
     }
 
-    private void handleNewLocation(Location location) {
-        Log.d(TAG, location.toString());
-    }
 }
