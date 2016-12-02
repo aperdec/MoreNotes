@@ -1,14 +1,19 @@
 package com.example.perds.morenotes;
 
 import android.*;
+import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -34,6 +39,7 @@ public class NoteEditing extends AppCompatActivity {
     static final int CAPTURE_IMAGE_ACTIVITY = 5;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 30;
     private static final String SETTINGS_PREFS_AVATAR = "";
+    private int id = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +138,54 @@ public class NoteEditing extends AppCompatActivity {
                 Log.i("fail","failure");
             }
         }
+    }
+
+    //audio coding
+    public void play(View v){
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.RECORD_AUDIO, true);
+        } else {
+            recordAudio(id+".mpeg4");
+        }
+
+    }
+
+    public void recordAudio(String fileName) {
+        final MediaRecorder recorder = new MediaRecorder();
+        ContentValues values = new ContentValues(3);
+        values.put(MediaStore.MediaColumns.TITLE, fileName);
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
+        try {
+            recorder.prepare();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        final ProgressDialog mProgressDialog = new ProgressDialog(NoteEditing.this);
+        //mProgressDialog.setTitle(R.string.lbl_recording);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setButton("Stop recording", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                mProgressDialog.dismiss();
+                recorder.stop();
+                recorder.release();
+            }
+        });
+
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(){
+            public void onCancel(DialogInterface p1) {
+                recorder.stop();
+                recorder.release();
+            }
+        });
+        recorder.start();
+        mProgressDialog.show();
     }
 
 /*
