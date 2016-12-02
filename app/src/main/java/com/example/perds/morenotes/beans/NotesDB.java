@@ -25,7 +25,7 @@ public class NotesDB {
     // constants for the table
     public static final String NOTES_TABLE = "Notes";
 
-    public static final String ID = "_id";
+    public static final String ID = "id";
     public static final int ID_COLUMN = 0;
 
     public static final String TITLE = "title";
@@ -58,8 +58,8 @@ public class NotesDB {
                     TEXT + " TEXT, " +
                     LOCATION + " TEXT, " +
                     DATE_CREATED + " TEXT, " +
-                    PICTURE + " BLOB, " +
-                    AUDIO + " BLOB)";
+                    PICTURE + " TEXT, " +
+                    AUDIO + " TEXT)";
 
     public NotesDB(Context context) {
         // initialize our OpenHelper class

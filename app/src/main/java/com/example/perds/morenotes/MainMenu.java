@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.provider.LiveFolders.INTENT;
@@ -41,6 +42,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private static final String NOTE_PREFS = "NotePrefs", SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
     private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int NEW_NOTE = 3;
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -76,10 +78,17 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent();
+                intent.setClass(view.getContext(), NoteEditing.class);
+                Note newNote = new Note();
+                newNote.setId(getNoteId());
+                newNote.setDateCreated(new Date().toString());
+                newNote.setLocation(getLocation());
+                intent.putExtra("note", newNote);
+                intent.putExtra("action", "save");
+                startActivityForResult(intent, NEW_NOTE);
 
-                    connect();
+                connect();
 
             }
         });
@@ -109,9 +118,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         }
 
         // This is to load the database
-//        notes = notesDB.getAllNotes();
-//        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
-//        lstNotes.setAdapter(myArrayAdapter);
+        notes = notesDB.getAllNotes();
+        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+        lstNotes.setAdapter(myArrayAdapter);
 
         //get address stuff
        // addressTextView = (TextView) findViewById(R.id.txtLocation);
@@ -125,6 +134,21 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
 
 
+
+    private String getLocation() {
+        // TODO add code to return location
+        return null;
+    }
+
+    public int getNoteId() {
+        int id = 1;
+        for (Note note: notes) {
+            if (note.getId() >= id) {
+                id = note.getId() + 1;
+            }
+        }
+        return id;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -151,22 +175,23 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Activity Result", "Request Code:" + requestCode + ", Result Code:" + resultCode);
 
-        if (requestCode == VIEW_NOTE) {
+        if (requestCode == VIEW_NOTE || requestCode == EDIT_NOTE || requestCode == NEW_NOTE) {
 
             if (resultCode == RESULT_OK) {
                 String action = data.getStringExtra("action");
                 Note note = data.getParcelableExtra("note");
                 switch (action) {
-                    case "delete" :
+                    case "delete":
                         Log.i("Delete", "Note " + note.getId() + " is being removed");
                         notesDB.deleteNotesById(note.getId());
                         break;
-                    case "save" :
+                    case "save":
                         Log.i("Save", "Note " + note.getId() + " is being added");
                         notesDB.saveNote(note);
                         break;
-                    case "update" :
+                    case "update":
                         Log.i("Update", "Note " + note.getId() + " is being updated");
                         notesDB.updateNoteById(note);
                         break;
@@ -177,6 +202,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 Log.i("Canceled", "The activity has returned with a cancel result code");
             }
         }
+        notes = notesDB.getAllNotes();
+        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+        lstNotes.setAdapter(myArrayAdapter);
     }
 
     @Override
@@ -278,7 +306,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         Location location = LocationServices.FusedLocationApi
                .getLastLocation(mGoogleApiClient);
 
-        if (location != null){
+        if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
             intent.putExtra("latitude", lat);
