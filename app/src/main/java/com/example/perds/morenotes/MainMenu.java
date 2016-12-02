@@ -67,12 +67,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         notesDB = new NotesDB(this);
         notes = new ArrayList<>();
-        notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
-        notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        intent = new Intent(MainMenu.this, NoteEditing.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -131,9 +128,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 .build();
                 connect();
     }
-
-
-
 
     private String getLocation() {
         // TODO add code to return location
@@ -236,8 +230,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
@@ -299,7 +292,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-
         mGoogleApiClient.connect();
 
         intent = new Intent(MainMenu.this, NoteEditing.class);
@@ -331,7 +323,4 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
     }
-
-
-
 }
