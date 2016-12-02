@@ -289,7 +289,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         mGoogleApiClient.connect();
 
-        intent = new Intent(MainMenu.this, NoteEditing.class);
         Location location = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
 
