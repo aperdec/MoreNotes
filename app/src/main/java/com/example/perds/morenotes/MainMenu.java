@@ -3,7 +3,9 @@ package com.example.perds.morenotes;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -25,17 +27,22 @@ import com.example.perds.morenotes.beans.Note;
 import com.example.perds.morenotes.beans.NotesDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.provider.LiveFolders.INTENT;
+
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String NOTE_PREFS = "NotePrefs", SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
     private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    public static final String TAG = MapsActivity.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -45,6 +52,8 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private NotesDB notesDB;
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
+    Intent intent;
+    LocationRequest mLocationRequest;
 
 
     double lat, lng = 0.0;
@@ -61,7 +70,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
+        intent = new Intent(MainMenu.this, NoteEditing.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -195,8 +204,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             // Access to the location has been granted to the app.
 
         }
-        //startActivity(intent);
-     //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
 
     }
 
@@ -255,18 +262,21 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onConnected(Bundle bundle) {
 
-      //  Toast.makeText(getApplicationContext(),"ITS GOING IN ON CONNECTED",Toast.LENGTH_LONG).show();
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-         //   Toast.makeText(getApplicationContext(),"Onconnected Permisison Deny",Toast.LENGTH_LONG).show();
 
             return;
         }
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
+
+        mGoogleApiClient.connect();
+
+        intent = new Intent(MainMenu.this, NoteEditing.class);
         Location location = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+               .getLastLocation(mGoogleApiClient);
 
         if (location != null){
             lat = location.getLatitude();
@@ -274,7 +284,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             intent.putExtra("latitude", lat);
             intent.putExtra("longitude", lng);
             startActivity(intent);
-            Toast.makeText(getApplicationContext(),location.toString(),Toast.LENGTH_LONG).show();
+           Toast.makeText(getApplicationContext(),location.toString(),Toast.LENGTH_LONG).show();
+        } else {
+            handleNewLocation(location);
         }
     }
 
@@ -287,4 +299,11 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    private void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+    }
+
+
+
 }
