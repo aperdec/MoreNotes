@@ -118,7 +118,8 @@
                 android:text="Media"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnAudio" />
+                android:id="@+id/btnAudio"
+                android:onClick="play"/>
 
             <Button
                 android:text="Picture"
