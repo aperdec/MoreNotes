@@ -3,7 +3,9 @@ package com.example.perds.morenotes;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -19,17 +21,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.Manifest;
+import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 import com.example.perds.morenotes.beans.NotesDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static android.provider.LiveFolders.INTENT;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -38,7 +44,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int NEW_NOTE = 3;
 
-    private GoogleApiClient googleApiClient;
+    public static final String TAG = MapsActivity.class.getSimpleName();
+
+    private GoogleApiClient mGoogleApiClient;
 
     private ListView lstNotes;
 
@@ -46,6 +54,8 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private NotesDB notesDB;
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
+    Intent intent;
+    LocationRequest mLocationRequest;
 
 
     double lat, lng = 0.0;
@@ -62,7 +72,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
+        intent = new Intent(MainMenu.this, NoteEditing.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -113,13 +123,17 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         lstNotes.setAdapter(myArrayAdapter);
 
         //get address stuff
-        // addressTextView = (TextView) findViewById(R.id.txtLocation);
-        googleApiClient = new GoogleApiClient.Builder(this)
+       // addressTextView = (TextView) findViewById(R.id.txtLocation);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+                connect();
     }
+
+
+
 
     private String getLocation() {
         // TODO add code to return location
@@ -206,6 +220,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
+            //enable my location here *****************************************
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -217,8 +232,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             // Access to the location has been granted to the app.
 
         }
-        //startActivity(intent);
-        //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
 
     }
 
@@ -254,15 +267,24 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         }
     }
 
-    public void connect() {
-        googleApiClient.connect();
+    public void connect(){
+
+        mGoogleApiClient.connect();
+
+        if (mGoogleApiClient.isConnecting()==true){
+           Toast.makeText(getApplicationContext(),"connecting",Toast.LENGTH_LONG).show();
+        } else if (mGoogleApiClient.isConnected()==true) {
+            Toast.makeText(getApplicationContext(),"connected",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),"not connected",Toast.LENGTH_LONG).show();
+        }
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -272,9 +294,17 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             return;
         }
-        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+
+
+        mGoogleApiClient.connect();
+
+        intent = new Intent(MainMenu.this, NoteEditing.class);
         Location location = LocationServices.FusedLocationApi
-                .getLastLocation(googleApiClient);
+               .getLastLocation(mGoogleApiClient);
 
         if (location != null) {
             lat = location.getLatitude();
@@ -282,6 +312,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             intent.putExtra("latitude", lat);
             intent.putExtra("longitude", lng);
             startActivity(intent);
+           Toast.makeText(getApplicationContext(),location.toString(),Toast.LENGTH_LONG).show();
+        } else {
+            handleNewLocation(location);
         }
     }
 
@@ -294,4 +327,11 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    private void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+    }
+
+
+
 }
