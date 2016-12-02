@@ -57,6 +57,8 @@ public class NoteEditing extends AppCompatActivity {
         Note note = intent.getParcelableExtra("note");
         action = intent.getStringExtra("action");
 
+
+
         id = note.getId();
         location = note.getLocation();
         date = note.getDateCreated();
@@ -212,6 +214,12 @@ public class NoteEditing extends AppCompatActivity {
         intent.putExtra("action", action);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    public void displayMap(String location){
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("location",location);
+
     }
 
 /*
