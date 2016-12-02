@@ -77,20 +77,13 @@
         android:weightSum="1"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/cast_ic_notification_small_icon"
-            android:id="@+id/imageView"
-            android:layout_weight="0.83" />
-
         <TextView
             android:layout_width="match_parent"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/txtMessege"
             android:hint="Type Message Here"
-            android:layout_weight="0.83"
+            android:layout_weight="1.69"
             android:layout_height="wrap_content"
             android:editable="false"
             />
