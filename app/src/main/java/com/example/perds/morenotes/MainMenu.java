@@ -186,7 +186,15 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             //enable my location here *****************************************
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, true);
+        } else {
+            // Access to the location has been granted to the app.
 
+        }
         //startActivity(intent);
      //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
 
