@@ -25,7 +25,9 @@ public class ViewNote extends AppCompatActivity {
     private Note note;
     private Intent intent;
     private static final int EDIT_NOTE = 1;
+    private static final int VIEW_PIC = 33;
     private String filePath;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class ViewNote extends AppCompatActivity {
         cat.setText(note.getCategory());
         filePath = note.getPicture();
 
+        id=note.getId();
+
     }
 
     public void editNote(View v){
@@ -61,8 +65,12 @@ public class ViewNote extends AppCompatActivity {
     }
 
     public void viewImg(View v){
+        Intent pic = new Intent();
+        pic.setClass(this, PictureView.class);
+        pic.putExtra("id", id);
+        startActivityForResult(pic, VIEW_PIC);
         //loadImageFromStorage(filePath);
-        loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
+        //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
     }
 
     private void loadImageFromStorage(String path)
