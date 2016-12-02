@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_view_note"
     android:layout_width="match_parent"
@@ -72,9 +73,16 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="95dp"
         android:layout_weight="0.52"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/cast_ic_notification_small_icon"
+            android:id="@+id/imageView"
+            android:layout_weight="0.83" />
 
         <TextView
             android:layout_width="match_parent"
@@ -82,8 +90,8 @@
             android:ems="10"
             android:id="@+id/txtMessege"
             android:hint="Type Message Here"
-            android:layout_weight="1.44"
-            android:layout_height="match_parent"
+            android:layout_weight="0.83"
+            android:layout_height="wrap_content"
             android:editable="false"
             />
 
@@ -142,6 +150,25 @@
                         android:id="@+id/txtDate"
                         android:layout_weight="1.08"
                         android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:text="View image"
+                        android:layout_width="181dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnViewImg"
+                        android:onClick="viewImg"/>
+
+                    <Button
+                        android:text="Play Audio"
+                        android:layout_width="169dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnAudio" />
                 </LinearLayout>
 
                 <LinearLayout

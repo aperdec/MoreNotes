@@ -1,12 +1,19 @@
 package com.example.perds.morenotes;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ViewNote extends AppCompatActivity {
 
@@ -18,6 +25,7 @@ public class ViewNote extends AppCompatActivity {
     private Note note;
     private Intent intent;
     private static final int EDIT_NOTE = 1;
+    private String filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,7 @@ public class ViewNote extends AppCompatActivity {
         loc.setText(note.getLocation());
         date.setText(note.getDateCreated());
         cat.setText(note.getCategory());
+        filePath = note.getPicture();
 
     }
 
@@ -49,5 +58,24 @@ public class ViewNote extends AppCompatActivity {
 
     public void delNote(View v){
 
+    }
+
+    public void viewImg(View v){
+        //loadImageFromStorage(filePath);
+        loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
+    }
+
+    private void loadImageFromStorage(String path)
+    {
+        try {
+            File f=new File(path, "profile.jpg");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            ImageView img=(ImageView)findViewById(R.id.imageView);
+            img.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
