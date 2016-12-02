@@ -61,7 +61,11 @@ public class ViewNote extends AppCompatActivity {
     }
 
     public void delNote(View v){
-
+        Intent intent = new Intent();
+        intent.putExtra("note", note);
+        intent.putExtra("action", "delete");
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public void viewImg(View v){

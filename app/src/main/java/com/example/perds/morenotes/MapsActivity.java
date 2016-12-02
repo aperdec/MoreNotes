@@ -1,8 +1,11 @@
 package com.example.perds.morenotes;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +44,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         Intent intent = getIntent();
 
-
         double Lat = intent.getDoubleExtra("latitude", 0.0);
         double Lng = intent.getDoubleExtra("longitude", 0.0);
-
+        String testLat = String.valueOf(Lat);
+        Toast.makeText(getApplicationContext(),testLat,Toast.LENGTH_LONG).show();
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(Lat, Lng);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
     }
+
+
+
+
 }

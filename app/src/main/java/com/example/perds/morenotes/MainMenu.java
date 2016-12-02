@@ -1,5 +1,6 @@
 package com.example.perds.morenotes;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -7,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +18,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.Manifest;
+import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 import com.example.perds.morenotes.beans.NotesDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -35,8 +37,11 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private static final String NOTE_PREFS = "NotePrefs", SETTINGS_PREFS_NOTES = "SettingsPrefsNotes";
     private static final int EDIT_NOTE = 1, VIEW_NOTE = 2;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int NEW_NOTE = 3;
+    public String locationStr;
+    public static final String TAG = MapsActivity.class.getSimpleName();
 
-    private GoogleApiClient googleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     private ListView lstNotes;
 
@@ -45,6 +50,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
 
+    LocationRequest mLocationRequest;
 
     double lat, lng = 0.0;
 
@@ -52,24 +58,28 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        locationStr = null;
         notesDB = new NotesDB(this);
         notes = new ArrayList<>();
-        notes.add(new Note(1, "First Note", "Bubbles", "This is note number 1", "45.32, 3.232", "11/11/11", null, null));
-        notes.add(new Note(2, "Second Note", "Bath", "OMG this is like totaly the second note", "34.322, 23.232", "12/12/12", null, null));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent();
+                intent.setClass(view.getContext(), NoteEditing.class);
+                Note newNote = new Note();
+                newNote.setId(getNoteId());
+                newNote.setDateCreated(new Date().toString());
+                newNote.setLocation(locationStr);
+                intent.putExtra("note", newNote);
+                intent.putExtra("action", "save");
+                startActivityForResult(intent, NEW_NOTE);
 
-                    connect();
+                connect();
 
             }
         });
@@ -99,17 +109,28 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         }
 
         // This is to load the database
-//        notes = notesDB.getAllNotes();
-//        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
-//        lstNotes.setAdapter(myArrayAdapter);
+        notes = notesDB.getAllNotes();
+        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+        lstNotes.setAdapter(myArrayAdapter);
 
         //get address stuff
-       // addressTextView = (TextView) findViewById(R.id.txtLocation);
-        googleApiClient = new GoogleApiClient.Builder(this)
+        // addressTextView = (TextView) findViewById(R.id.txtLocation);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        connect();
+    }
+
+    public int getNoteId() {
+        int id = 1;
+        for (Note note : notes) {
+            if (note.getId() >= id) {
+                id = note.getId() + 1;
+            }
+        }
+        return id;
     }
 
     @Override
@@ -137,22 +158,23 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Activity Result", "Request Code:" + requestCode + ", Result Code:" + resultCode);
 
-        if (requestCode == VIEW_NOTE) {
+        if (requestCode == VIEW_NOTE || requestCode == EDIT_NOTE || requestCode == NEW_NOTE) {
 
             if (resultCode == RESULT_OK) {
                 String action = data.getStringExtra("action");
                 Note note = data.getParcelableExtra("note");
                 switch (action) {
-                    case "delete" :
+                    case "delete":
                         Log.i("Delete", "Note " + note.getId() + " is being removed");
                         notesDB.deleteNotesById(note.getId());
                         break;
-                    case "save" :
+                    case "save":
                         Log.i("Save", "Note " + note.getId() + " is being added");
                         notesDB.saveNote(note);
                         break;
-                    case "update" :
+                    case "update":
                         Log.i("Update", "Note " + note.getId() + " is being updated");
                         notesDB.updateNoteById(note);
                         break;
@@ -163,6 +185,9 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 Log.i("Canceled", "The activity has returned with a cancel result code");
             }
         }
+        notes = notesDB.getAllNotes();
+        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+        lstNotes.setAdapter(myArrayAdapter);
     }
 
     @Override
@@ -178,6 +203,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
+            //enable my location here *****************************************
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -189,14 +215,11 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             // Access to the location has been granted to the app.
 
         }
-        //startActivity(intent);
-     //  Toast toast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
@@ -226,15 +249,24 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         }
     }
 
-    public void connect(){
-        googleApiClient.connect();
+    public void connect() {
+
+        mGoogleApiClient.connect();
+
+        if (mGoogleApiClient.isConnecting() == true) {
+            Toast.makeText(getApplicationContext(), "connecting", Toast.LENGTH_LONG).show();
+        } else if (mGoogleApiClient.isConnected() == true) {
+            Toast.makeText(getApplicationContext(), "connected", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
+        }
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -244,16 +276,20 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
             return;
         }
-        Intent intent = new Intent(MainMenu.this, NoteEditing.class);
-        Location location = LocationServices.FusedLocationApi
-                .getLastLocation(googleApiClient);
 
-        if (location != null){
+        mGoogleApiClient.connect();
+
+        Location location = LocationServices.FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
-            intent.putExtra("latitude", lat);
-            intent.putExtra("longitude", lng);
-            startActivity(intent);
+            locationStr = String.valueOf(lat) + "," + String.valueOf(lng);
+
+            Toast.makeText(getApplicationContext(), location.toString(), Toast.LENGTH_LONG).show();
+        } else {
+            locationStr = "122.0,33.0";
         }
     }
 
@@ -266,4 +302,5 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }
