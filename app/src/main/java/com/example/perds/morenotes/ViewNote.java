@@ -3,6 +3,8 @@ package com.example.perds.morenotes;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +28,7 @@ public class ViewNote extends AppCompatActivity {
     private Intent intent;
     private static final int EDIT_NOTE = 1;
     private String filePath;
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,5 +80,27 @@ public class ViewNote extends AppCompatActivity {
         {
             e.printStackTrace();
         }
+    }
+
+    public void playMusic (View v) {
+        String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/12.mpeg4";
+
+        //mediaPlayer.setDataSource(fileInputStream.getFD());
+
+        try {
+            Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
+            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
+            //mp.setDataSource(fileInputStream.getFD());
+            mp.setDataSource(filePathMusic);
+            //player.prepare();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Exception of type : " + e.toString());
+            e.printStackTrace();
+        }
+
+        ;
+        mp.start();
     }
 }
