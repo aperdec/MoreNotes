@@ -1,6 +1,5 @@
 package com.example.perds.morenotes;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -9,32 +8,25 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
-import android.net.Uri;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 
 public class NoteEditing extends AppCompatActivity {
 
@@ -45,7 +37,6 @@ public class NoteEditing extends AppCompatActivity {
     static final int CAPTURE_IMAGE_ACTIVITY = 5;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 30;
     private static final String SETTINGS_PREFS_AVATAR = "";
-    private int id = 12;
 
     private int id;
     private EditText edtTitle;
@@ -153,14 +144,14 @@ public class NoteEditing extends AppCompatActivity {
     }
 
     //audio coding
-    public void play(View v){
+    public void play(View v) {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.RECORD_AUDIO, true);
         } else {
-            recordAudio(id+".mpeg4");
+            recordAudio(id + ".mpeg4");
         }
 
     }
@@ -175,7 +166,7 @@ public class NoteEditing extends AppCompatActivity {
         recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
         try {
             recorder.prepare();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -190,7 +181,7 @@ public class NoteEditing extends AppCompatActivity {
             }
         });
 
-        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(){
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface p1) {
                 recorder.stop();
                 recorder.release();

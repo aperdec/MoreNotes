@@ -1,15 +1,13 @@
 package com.example.perds.morenotes;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.Manifest;
 import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
@@ -34,8 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static android.provider.LiveFolders.INTENT;
 
 public class MainMenu extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -120,13 +115,13 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         lstNotes.setAdapter(myArrayAdapter);
 
         //get address stuff
-       // addressTextView = (TextView) findViewById(R.id.txtLocation);
+        // addressTextView = (TextView) findViewById(R.id.txtLocation);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-                connect();
+        connect();
     }
 
     private String getLocation() {
@@ -136,7 +131,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
     public int getNoteId() {
         int id = 1;
-        for (Note note: notes) {
+        for (Note note : notes) {
             if (note.getId() >= id) {
                 id = note.getId() + 1;
             }
@@ -260,16 +255,16 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         }
     }
 
-    public void connect(){
+    public void connect() {
 
         mGoogleApiClient.connect();
 
-        if (mGoogleApiClient.isConnecting()==true){
-           Toast.makeText(getApplicationContext(),"connecting",Toast.LENGTH_LONG).show();
-        } else if (mGoogleApiClient.isConnected()==true) {
-            Toast.makeText(getApplicationContext(),"connected",Toast.LENGTH_LONG).show();
+        if (mGoogleApiClient.isConnecting() == true) {
+            Toast.makeText(getApplicationContext(), "connecting", Toast.LENGTH_LONG).show();
+        } else if (mGoogleApiClient.isConnected() == true) {
+            Toast.makeText(getApplicationContext(), "connected", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"not connected",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -296,7 +291,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         intent = new Intent(MainMenu.this, NoteEditing.class);
         Location location = LocationServices.FusedLocationApi
-               .getLastLocation(mGoogleApiClient);
+                .getLastLocation(mGoogleApiClient);
 
         if (location != null) {
             lat = location.getLatitude();
@@ -304,7 +299,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             intent.putExtra("latitude", lat);
             intent.putExtra("longitude", lng);
             startActivity(intent);
-           Toast.makeText(getApplicationContext(),location.toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), location.toString(), Toast.LENGTH_LONG).show();
         } else {
             handleNewLocation(location);
         }
