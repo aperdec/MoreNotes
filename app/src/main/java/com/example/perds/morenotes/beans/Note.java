@@ -22,6 +22,9 @@ public class Note implements Parcelable {
     private String picture;
     private String audio;
 
+    public Note() {
+    }
+
     public Note(int id, String title, String category, String text, String location, String dateCreated, String picture, String audio) {
         this.id = id;
         this.title = title;

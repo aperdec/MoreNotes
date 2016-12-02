@@ -52,7 +52,6 @@ public class MyArrayAdapter extends ArrayAdapter<Note> {
         // set the text
         txtCapital.setText("Category: " + notes.get(position).getCategory());
 
-
         return convertView;
     }
 }
