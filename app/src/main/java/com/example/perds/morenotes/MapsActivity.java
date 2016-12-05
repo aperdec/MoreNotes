@@ -43,7 +43,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
 
         mMap = googleMap;
         Intent intent = getIntent();
@@ -64,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(getApplicationContext(),testLat,Toast.LENGTH_LONG).show();
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(latitude,longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title(markerTitle).icon(bitmapDescriptor));
+        mMap.addMarker(new MarkerOptions().position(sydney).title(markerTitle));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 9.0f ) );

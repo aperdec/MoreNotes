@@ -90,14 +90,14 @@
 
         <LinearLayout
         android:orientation="horizontal"
-        android:layout_weight="0.45"
+        android:layout_weight="0.50"
         android:layout_height="2dp"
         android:layout_width="wrap_content">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="380dp"
-                android:layout_height="235dp"
+                android:layout_height="262dp"
                 android:weightSum="1">
 
                 <LinearLayout
@@ -125,7 +125,8 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.80">
 
                     <TextView
                         android:text="Date Created:"
@@ -147,10 +148,10 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="157dp"
-                    android:gravity="center"
+                    android:layout_height="103dp"
+                    android:gravity="center|bottom"
 
-                    android:layout_weight="0.19">
+                    >
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/del"
