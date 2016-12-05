@@ -8,14 +8,21 @@
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
 
     <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+        <item>Spinners</item>
+        <item>The 90s</item>
+        <item>Space</item>
+        <item>X-Files</item>
+        <item>Stickers</item>
+        <item>Happy Hour</item>
+        <item>Pizza Pockets</item>
+        <item>Shakeweight</item>
+        <item>Hopscotch</item>
+        <item>Double Dutch</item>
+        <item>Pogs</item>
+        <item>YTV</item>
+        <item>Sunny D</item>
+        <item>TNG</item>
+        <item>Bill Clinton</item>
     </string-array>
 
     <string-array name="sort_by_array">
