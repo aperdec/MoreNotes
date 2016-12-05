@@ -27,36 +27,42 @@
 
         <TextView
             android:text="Title:"
-            android:layout_width="120dp"
+            android:layout_width="66dp"
             android:layout_height="match_parent"
             android:id="@+id/lblTitle"
-            android:textSize="24sp"
-            android:layout_weight="1.10" />
+            android:textSize="24sp" />
 
         <TextView
-            android:layout_width="211dp"
+            android:layout_width="190dp"
             android:layout_height="match_parent"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/txtTitle"
             android:textSize="24sp"
             android:hint="Input Title Here"
-            android:editable="false"
-            android:textAlignment="center" />
-    </LinearLayout>
+            android:editable="false" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|clip_vertical|clip_horizontal"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@drawable/ic_mode_edit_black_24dp"
+                android:onClick="editNote"/>
+        </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="21dp"
-        android:layout_weight="0.10">
+        android:layout_height="wrap_content">
 
         <TextView
             android:text="Category:"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/lblCategory"
-            android:layout_weight="0.82"
+            android:layout_weight="0.22"
             android:textSize="18sp"
             android:textAllCaps="false" />
 
@@ -76,13 +82,6 @@
         android:layout_weight="0.52"
         android:weightSum="1"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/cast_ic_notification_small_icon"
-            android:id="@+id/imageView"
-            android:layout_weight="0.83" />
 
         <TextView
             android:layout_width="match_parent"
@@ -111,11 +110,11 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="362dp"
-                    android:layout_height="48dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:text="TextView"
-                        android:layout_width="136dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/lblLocation"
                         tools:text="Location Coordinates:"
@@ -125,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtLocation"
-                        android:hint="Location Display Here"
+                        android:hint="Lat, Lon"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -154,36 +153,48 @@
 
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:text="View image"
-                        android:layout_width="181dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btnViewImg"
-                        android:onClick="viewImg"/>
-
-                    <Button
-                        android:text="Play Audio"
-                        android:layout_width="169dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btnAudio"
-                        android:onClick="playMusic"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.16">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:weightSum="1">
 
-                    <Button
-                        android:text="Delete"
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/photo"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btnDel"
-                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/fab_margin"
+                        app:srcCompat="@drawable/ic_assignment_ind_black_24dp"
+                        android:onClick="viewImg"
+                        android:layout_weight="0.09" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/audio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/fab_margin"
+                        app:srcCompat="@drawable/ic_play_circle_outline_black_24dp"
+                        android:onClick="playMusic"
+                        android:layout_weight="0.07" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/map"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/fab_margin"
+                        app:srcCompat="@drawable/ic_place_black_24dp"
+                        android:onClick=""
+                        android:layout_weight="0.11" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/del"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/fab_margin"
+                        app:srcCompat="@drawable/ic_clear_black_24dp"
                         android:onClick="delNote"/>
 
                     <Button

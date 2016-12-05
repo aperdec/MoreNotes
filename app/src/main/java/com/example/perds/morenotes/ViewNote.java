@@ -7,11 +7,13 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
+import com.example.perds.morenotes.beans.NotesDB;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,15 +27,16 @@ public class ViewNote extends AppCompatActivity {
     private TextView date;
     private TextView cat;
     private Note note;
-    private Intent intent;
     private static final int EDIT_NOTE = 1;
     private String filePath;
-    private MediaPlayer mp;
+    private NotesDB notesDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_note);
+
+        notesDB = new NotesDB(this);
 
         title = (TextView) findViewById(R.id.txtTitle);
         message = (TextView) findViewById(R.id.txtMessege);
@@ -41,22 +44,26 @@ public class ViewNote extends AppCompatActivity {
         date  = (TextView) findViewById(R.id.txtDate);
         cat  = (TextView) findViewById(R.id.txtCategory);
 
-        intent = getIntent();
+        Intent intent = getIntent();
         note = intent.getParcelableExtra("note");
+        updateFields();
+    }
+
+    public void updateFields() {
         title.setText(note.getTitle());
         message.setText(note.getText());
         loc.setText(note.getLocation());
         date.setText(note.getDateCreated());
         cat.setText(note.getCategory());
         filePath = note.getPicture();
-
     }
 
     public void editNote(View v){
-        Intent i = new Intent();
-        i.setClass(this, NoteEditing.class);
-        i.putExtra("editNote", note);
-        startActivityForResult(i, EDIT_NOTE);
+        Intent intent = new Intent();
+        intent.setClass(this, NoteEditing.class);
+        intent.putExtra("note", note);
+        intent.putExtra("action", "update");
+        startActivityForResult(intent, EDIT_NOTE);
     }
 
     public void delNote(View v){
@@ -69,9 +76,9 @@ public class ViewNote extends AppCompatActivity {
 
     public void viewImg(View v){
         //loadImageFromStorage(filePath);
-        loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
+        //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
     }
-
+/*
     private void loadImageFromStorage(String path)
     {
         try {
@@ -84,19 +91,24 @@ public class ViewNote extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-    }
+    } */
 
     public void playMusic (View v) {
-        String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/12.mpeg4";
-
+        MediaPlayer mp = new MediaPlayer();
+        //String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/test.mp4";
+        String fileName = "test";
         //mediaPlayer.setDataSource(fileInputStream.getFD());
 
         try {
-            Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
-            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
+            //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
+            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
             //mp.setDataSource(fileInputStream.getFD());
-            mp.setDataSource(filePathMusic);
-            //player.prepare();
+            mp.reset();
+            mp.setDataSource(fileInputStream.getFD());
+            fileInputStream.close();
+            //mp.setDataSource(filePathMusic);
+
+            mp.prepare();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -104,7 +116,6 @@ public class ViewNote extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ;
         mp.start();
     }
 
@@ -127,5 +138,27 @@ public class ViewNote extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Activity Result", "Request Code:" + requestCode + ", Result Code:" + resultCode);
 
+        if (requestCode == EDIT_NOTE) {
+            if (resultCode == RESULT_OK) {
+                String action = data.getStringExtra("action");
+                note = data.getParcelableExtra("note");
+                switch (action) {
+                    case "update":
+                        Log.i("Update", "Note " + note.getId() + " is being updated");
+                        notesDB.updateNoteById(note);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                Log.i("Canceled", "The activity has returned with a cancel result code");
+            }
+        }
+        updateFields();
+    }
 }

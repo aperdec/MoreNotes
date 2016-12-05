@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.vision.text.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,28 +49,19 @@ public class NoteEditing extends AppCompatActivity {
     private String picture;
     private String audio;
     private String action;
+    private Note note;
+    private TextView errorMessage;
     private GoogleMap mMap;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editing);
 
-        Intent intent = getIntent();
-        Note note = intent.getParcelableExtra("note");
-        action = intent.getStringExtra("action");
-
-
-
-        id = note.getId();
-        location = note.getLocation();
-        date = note.getDateCreated();
-
         edtTitle = (EditText) findViewById(R.id.editText);
         edtCategory = (Spinner) findViewById(R.id.spinner2);
         edtText = (EditText) findViewById(R.id.txtMessege);
+        errorMessage = (TextView) findViewById(R.id.errorText);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
@@ -77,6 +69,32 @@ public class NoteEditing extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         edtCategory.setAdapter(adapter);
+
+        Intent intent = getIntent();
+        note = intent.getParcelableExtra("note");
+        action = intent.getStringExtra("action");
+
+        id = note.getId();
+        location = note.getLocation();
+        date = note.getDateCreated();
+        picture = note.getPicture();
+        audio = note.getAudio();
+
+        edtTitle.setText(note.getTitle());
+        edtCategory.setSelection(matchSelected(note.getCategory()));
+        edtText.setText(note.getText());
+    }
+
+    private int matchSelected(String category) {
+        String[] categories = this.getResources().getStringArray(R.array.planets_array);
+        if (category != null) {
+            for (int i = 0; i < categories.length; i++) {
+                if (category.equals(categories[i])) {
+                    return i;
+                }
+            }
+        }
+        return 0;
     }
 
     //camera code
@@ -125,7 +143,6 @@ public class NoteEditing extends AppCompatActivity {
     }
 
     //takes the response from the camera -- if working the result will have an img
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TAKE_AVATAR_CAMERA_REQUEST:
@@ -157,7 +174,8 @@ public class NoteEditing extends AppCompatActivity {
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.RECORD_AUDIO, true);
         } else {
-            recordAudio(id + ".mpeg4");
+            //recordAudio(id);
+            recordAudio("test");
         }
 
     }
@@ -168,8 +186,8 @@ public class NoteEditing extends AppCompatActivity {
         values.put(MediaStore.MediaColumns.TITLE, fileName);
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
         try {
             recorder.prepare();
         } catch (Exception e) {
@@ -195,9 +213,11 @@ public class NoteEditing extends AppCompatActivity {
         });
         recorder.start();
         mProgressDialog.show();
+
     }
 
     public void saveNote(View view) {
+        boolean error = false;
         Intent intent = new Intent();
         Note note = new Note();
         note.setId(id);
@@ -205,24 +225,19 @@ public class NoteEditing extends AppCompatActivity {
         note.setDateCreated(date);
         note.setPicture(picture);
         note.setAudio(audio);
-        if (edtTitle.getText() != null) {
-            note.setTitle(edtTitle.getText().toString());
-        }
-        if (edtCategory.getSelectedItem() != null) {
-            note.setCategory(edtCategory.getSelectedItem().toString());
-        }
-        if (edtText.getText() != null) {
-            note.setText(edtText.getText().toString());
-        }
+        note.setTitle(edtTitle.getText().toString());
+        note.setCategory(edtCategory.getSelectedItem().toString());
+        note.setText(edtText.getText().toString());
+
         intent.putExtra("note", note);
         intent.putExtra("action", action);
         setResult(RESULT_OK, intent);
         finish();
     }
 
-    public void displayMap(String location){
+    public void displayMap(String location) {
         Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra("location",location);
+        intent.putExtra("location", location);
 
     }
 
