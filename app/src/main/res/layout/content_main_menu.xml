@@ -31,8 +31,14 @@
             android:id="@+id/search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="16"
+            android:layout_weight="11"
             android:hint="Search" />
+
+        <Spinner
+            android:id="@+id/searchBy"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <LinearLayout
