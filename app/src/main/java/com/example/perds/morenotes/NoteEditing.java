@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +39,7 @@ public class NoteEditing extends AppCompatActivity {
     private static final String CAM_PREF = "";
     static final int TAKE_AVATAR_CAMERA_REQUEST = 10;
     static final int CAPTURE_IMAGE_ACTIVITY = 5;
+    static final int TAKE_AVATAR_GALLERY_REQUEST = 6;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 30;
     private static final String SETTINGS_PREFS_AVATAR = "";
 
@@ -156,6 +159,7 @@ public class NoteEditing extends AppCompatActivity {
                             Log.i("Picture Saving", "camera working");
                             //picture = saveToInternalStorage(camPic);
                             saveToInternalStorage(camPic);
+                            Toast.makeText(getApplicationContext(), "Photo Saved",Toast.LENGTH_LONG).show();
                             Log.i("file saved", picture + " it worked");
                         } catch (Exception e) {
                             //save didn't work
@@ -163,6 +167,58 @@ public class NoteEditing extends AppCompatActivity {
                         }
                     }
                 }
+                break;
+
+            case TAKE_AVATAR_GALLERY_REQUEST:
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    //app stopped
+                } else if (resultCode == Activity.RESULT_OK) {
+                    Uri photoUri = data.getData();
+                    if (photoUri != null) {
+                        try {
+                            Bitmap gallPic = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
+                            int maxLen = 600;
+                            Bitmap scaledPic = sacleBitmapSameAspectRatio(gallPic, maxLen);
+                            saveToInternalStorage(scaledPic);
+                            Toast.makeText(getApplicationContext(), "Image from Camera Saved",Toast.LENGTH_LONG).show();
+                            //Bitmap.createScaledBitmap(gallPic,maxLen)
+                            //img = scaledPic;
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+        }
+    }
+
+    private Bitmap sacleBitmapSameAspectRatio(Bitmap b, int max){
+        int origH = b.getHeight();
+        int origW = b.getWidth();
+
+        int scaledH = scaleSide(origH, origW, max);
+        int scaledW = scaleSide(origW, origH, max);
+        return Bitmap.createScaledBitmap(b, scaledW, scaledH, true);
+    }
+
+    private int scaleSide(int s1, int s2, int max){
+        if (s1 >= s2){
+            return max;
+        }
+        return (int) ((float) max*((float) s1 / (float)s2));
+    }
+
+    //photo from gallery
+    public void getImg (View v){
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    android.Manifest.permission.CAMERA, true);
+        } else {
+            Intent pickPhoto = new Intent(Intent.ACTION_PICK);
+            pickPhoto.setType("image/*");
+            startActivityForResult(Intent.createChooser(pickPhoto,
+                    "Choose an image!"), TAKE_AVATAR_GALLERY_REQUEST);
         }
     }
 
@@ -202,6 +258,7 @@ public class NoteEditing extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 recorder.stop();
                 recorder.release();
+                Toast.makeText(getApplicationContext(), "Audio Recording Complete. Saved.",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -232,6 +289,7 @@ public class NoteEditing extends AppCompatActivity {
         intent.putExtra("note", note);
         intent.putExtra("action", action);
         setResult(RESULT_OK, intent);
+        Toast.makeText(getApplicationContext(), "Note Saved",Toast.LENGTH_LONG).show();
         finish();
     }
 
