@@ -1,181 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_note_editing"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.perds.morenotes.NoteEditing">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/errorText"
-        android:visibility="gone" />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Title:"
+            android:paddingTop="8sp"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:hint="Input Title Here"
+            android:inputType="textPersonName"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <TextView
+            android:id="@+id/lblCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Category:"
+            android:paddingTop="12sp"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="179dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="14"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <EditText
+            android:id="@+id/txtMessege"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="Title:"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/lblTitle"
-                android:textSize="24sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/editText"
-                android:textSize="14sp"
-                android:hint="Input Title Here" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="21dp"
-            android:layout_weight="0.10">
-
-            <TextView
-                android:text="Category:"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/lblCategory"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textAllCaps="false" />
-
-            <Spinner
-                android:layout_width="179dp"
-                android:layout_height="match_parent"
-                android:id="@+id/spinner2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:layout_weight="0.52"
-            android:weightSum="1">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/txtMessege"
-                android:hint="Type Message Here"
-                android:layout_weight="0.53"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_weight="0.13"
-            android:layout_height="2dp"
-            android:layout_width="match_parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.16">
-
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lblLocation"
-                    tools:text="Location:"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtLocation"
-                    android:hint="Location Display Here"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-
-            android:layout_weight="0.23">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btnTakePic"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
-                android:layout_weight="1"
-                android:onClick="onClickCam"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btnAddMedia"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_image_black_24dp"
-                android:layout_weight="1"
-                android:onClick="getImg"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btnAudio"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_keyboard_voice_black_24dp"
-                android:layout_weight="1"
-                android:onClick="play"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btnSelectAudio"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/mr_ic_audiotrack_light"
-                android:layout_weight="1"
-                android:onClick="addAudio"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btnEditText"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_save_black_24dp"
-                android:layout_weight="1"
-                android:onClick="saveNote"/>
-
-
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="0.53"
+            android:ems="10"
+            android:hint="Type Message Here"
+            android:inputType="textMultiLine" />
 
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.1"
+
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnTakePic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|bottom"
+            android:onClick="onClickCam"
+            app:srcCompat="@drawable/ic_add_a_photo_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAddMedia"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|bottom"
+            android:onClick="getImg"
+            app:srcCompat="@drawable/ic_image_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAudio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|bottom"
+            android:onClick="play"
+            app:srcCompat="@drawable/ic_keyboard_voice_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnSelectAudio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|bottom"
+            android:onClick="addAudio"
+            app:srcCompat="@drawable/mr_ic_audiotrack_light" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|bottom"
+            android:onClick="saveNote"
+            app:srcCompat="@drawable/ic_save_black_24dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

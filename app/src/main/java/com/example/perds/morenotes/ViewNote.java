@@ -87,12 +87,18 @@ public class ViewNote extends AppCompatActivity {
     }
 
     public void viewImg(View v){
+
         Intent pic = new Intent();
         pic.setClass(this, PictureView.class);
         String picId = note.getPicture();
-        pic.putExtra("picId", picId);
-        Toast.makeText(getApplicationContext(), "View Image",Toast.LENGTH_LONG).show();
-        startActivityForResult(pic, VIEW_PIC);
+        if(picId != null) {
+            pic.putExtra("picId", picId);
+            Toast.makeText(getApplicationContext(), "View Image",Toast.LENGTH_LONG).show();
+            startActivityForResult(pic, VIEW_PIC);
+        } else {
+            Toast.makeText(getApplicationContext(), "No Image Available",Toast.LENGTH_LONG).show();
+        }
+
         //loadImageFromStorage(filePath);
         //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
     }
@@ -115,19 +121,19 @@ public class ViewNote extends AppCompatActivity {
         //String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/test.mp4";
         String fileName = note.getAudio();
         //mediaPlayer.setDataSource(fileInputStream.getFD());
-
+    if(fileName != null) {
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 playAudio.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
-                Toast.makeText(getApplicationContext(), "Play Audio",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Play Audio", Toast.LENGTH_LONG).show();
             }
         });
 
         if (mp.isPlaying()) {
             mp.pause();
             playAudio.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
-            Toast.makeText(getApplicationContext(), "Audio Paused",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Audio Paused", Toast.LENGTH_LONG).show();
         } else {
             try {
                 //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
@@ -149,6 +155,9 @@ public class ViewNote extends AppCompatActivity {
 
             mp.start();
         }
+    } else {
+        Toast.makeText(getApplicationContext(), "No Audio Available",Toast.LENGTH_LONG).show();
+    }
     }
 
 

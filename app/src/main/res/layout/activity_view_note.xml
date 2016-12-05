@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_view_note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,205 +13,173 @@
     tools:context="com.example.perds.morenotes.ViewNote">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-        <LinearLayout
+        android:layout_height="0dp"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-            android:weightSum="1">
+        android:layout_weight="2"
+        android:weightSum="1">
 
         <TextView
-            android:text="Title:"
-            android:layout_width="66dp"
-            android:layout_height="match_parent"
             android:id="@+id/lblTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:text="Title:"
             android:textSize="24sp" />
 
         <TextView
-            android:layout_width="190dp"
-            android:layout_height="match_parent"
-            android:inputType="textPersonName"
-            android:ems="10"
             android:id="@+id/txtTitle"
-            android:textSize="24sp"
-            android:hint="Input Title Here"
-            android:editable="false" />
-
-        </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Category:"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/lblCategory"
-            android:layout_weight="0.22"
-            android:textSize="18sp"
-            android:textAllCaps="false" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/txtCategory"
-            android:layout_weight="2.47"
-            android:textSize="18sp"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_weight="0.52"
-        android:weightSum="1"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/txtMessege"
-            android:hint="Type Message Here"
-            android:layout_weight="1.69"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            />
+            android:textSize="24sp" />
 
     </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:text="Category:"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12"
         android:orientation="horizontal"
-        android:layout_weight="0.45"
-        android:layout_height="2dp"
-        android:layout_width="wrap_content">
+        android:weightSum="1">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="380dp"
-                android:layout_height="235dp"
-                android:weightSum="1">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="362dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/lblLocation"
-                        tools:text="Location Coordinates:"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtLocation"
-                        android:hint="Lat, Lon"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Date Created:"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/lblDateCreated"
-                        android:layout_weight="0.11"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:text="TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtDate"
-                        android:layout_weight="1.08"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="157dp"
-                    android:gravity="center"
-
-                    android:layout_weight="0.19">
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/del"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_delete_black_24dp"
-                        android:layout_weight="1"
-                        android:onClick="delNote"/>
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/photo"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_assignment_ind_black_24dp"
-                        android:layout_weight="1"
-                        android:onClick="viewImg"
-                        app:elevation="8dp" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/audio"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_play_circle_outline_black_24dp"
-                        android:layout_weight="1"
-                        android:onClick="playMusic" />
-
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/btnMap"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_place_black_24dp"
-                        android:onClick="displayMap"
-                        android:layout_weight="1" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/btnEdit"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_mode_edit_black_24dp"
-                        android:layout_weight="1"
-                        android:onClick="editNote"/>
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/txtMessege"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:inputType="textMultiLine" />
 
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location Coordinates"
+            android:textSize="20sp"
+            android:layout_marginEnd="5dp"
+            tools:text="Location Coordinates:" />
+
+        <TextView
+            android:id="@+id/txtLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lat, Lon"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblDateCreated"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:text="Date Created:"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="TextView"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/del"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="delNote"
+            app:srcCompat="@drawable/ic_delete_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/photo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="viewImg"
+            app:elevation="8dp"
+            app:srcCompat="@drawable/ic_assignment_ind_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/audio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="playMusic"
+            app:srcCompat="@drawable/ic_play_circle_outline_black_24dp" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnMap"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="displayMap"
+            app:srcCompat="@drawable/ic_place_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnEdit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="editNote"
+            app:srcCompat="@drawable/ic_mode_edit_black_24dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
