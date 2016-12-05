@@ -106,11 +106,10 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="TextView"
+                        android:text="Location Coordinates: "
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/lblLocation"
-                        tools:text="Location Coordinates:"
                         android:textSize="20sp" />
 
                     <TextView

@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        // double Lat = intent.getDoubleExtra("latitude", 0.0);
        // double Lng = intent.getDoubleExtra("longitude", 0.0);
         String testLat = String.valueOf(latitude);
-        Toast.makeText(getApplicationContext(),testLat,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),testLat,Toast.LENGTH_LONG).show();
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(latitude,longitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title(markerTitle));
