@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -161,4 +162,8 @@ public class ViewNote extends AppCompatActivity {
         }
         updateFields();
     }
+
+
+//    FloatingActionButton photo = (FloatingActionButton) findViewById(R.id.photo);
+
 }
