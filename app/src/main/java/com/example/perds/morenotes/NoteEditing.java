@@ -24,11 +24,11 @@ import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.vision.text.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 public class NoteEditing extends AppCompatActivity {
 
@@ -78,7 +78,7 @@ public class NoteEditing extends AppCompatActivity {
         location = note.getLocation();
         date = note.getDateCreated();
         //picture = note.getPicture();
-        picture = "pic"+note.getId()+".png";
+        picture = note.getPicture();
         audio = note.getAudio();
 
         edtTitle.setText(note.getTitle());
@@ -126,6 +126,7 @@ public class NoteEditing extends AppCompatActivity {
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
         //File mypath = new File(directory, note.getId() + ".jpg");
+        picture = "pic" + new Date().toString() + ".png";
         File mypath = new File(directory, picture);
         FileOutputStream fos = null;
         try {
@@ -147,25 +148,21 @@ public class NoteEditing extends AppCompatActivity {
     //takes the response from the camera -- if working the result will have an img
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case TAKE_AVATAR_CAMERA_REQUEST:
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    //app stopped
-                } else if (resultCode == Activity.RESULT_OK) {
-                    //camera worked
+            case CAPTURE_IMAGE_ACTIVITY:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bitmap camPic = (Bitmap) data.getExtras().get("data");
+                    if (camPic != null) {
+                        try {
+                            Log.i("Picture Saving", "camera working");
+                            //picture = saveToInternalStorage(camPic);
+                            saveToInternalStorage(camPic);
+                            Log.i("file saved", picture + " it worked");
+                        } catch (Exception e) {
+                            //save didn't work
+                            Log.i("fail", "failure");
+                        }
+                    }
                 }
-        }
-
-        Bitmap camPic = (Bitmap) data.getExtras().get("data");
-        if (camPic != null) {
-            try {
-                System.out.print("camera working");
-                //picture = saveToInternalStorage(camPic);
-                saveToInternalStorage(camPic);
-                Log.i("file saved", picture + " it worked");
-            } catch (Exception e) {
-                //save didn't work
-                Log.i("fail", "failure");
-            }
         }
     }
 
@@ -190,7 +187,7 @@ public class NoteEditing extends AppCompatActivity {
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
+        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName + ".mp4");
         try {
             recorder.prepare();
         } catch (Exception e) {
