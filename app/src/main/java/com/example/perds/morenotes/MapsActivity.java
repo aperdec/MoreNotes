@@ -47,16 +47,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
 
+        //inital default value
+        String markerTitle = "Note1";
+        markerTitle = intent.getStringExtra("title");
 
 
-        double Lat = intent.getDoubleExtra("latitude", 0.0);
-        double Lng = intent.getDoubleExtra("longitude", 0.0);
-        String testLat = String.valueOf(Lat);
+
+
+       // double Lat = intent.getDoubleExtra("latitude", 0.0);
+       // double Lng = intent.getDoubleExtra("longitude", 0.0);
+        String testLat = String.valueOf(latitude);
         Toast.makeText(getApplicationContext(),testLat,Toast.LENGTH_LONG).show();
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(latitude,longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(sydney).title(markerTitle));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.animateCamera( CameraUpdateFactory.zoomTo( 9.0f ) );
 
 
     }

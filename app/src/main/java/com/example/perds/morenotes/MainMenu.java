@@ -311,13 +311,17 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         mGoogleApiClient.connect();
 
+
         if (mGoogleApiClient.isConnecting() == true) {
-            Toast.makeText(getApplicationContext(), "connecting", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "connecting", Toast.LENGTH_SHORT).show();
         } else if (mGoogleApiClient.isConnected() == true) {
-            Toast.makeText(getApplicationContext(), "connected", Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(), "connected", Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
+
         }
+
 
     }
 
@@ -345,7 +349,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             lng = location.getLongitude();
             locationStr = String.valueOf(lat) + "," + String.valueOf(lng);
 
-            Toast.makeText(getApplicationContext(), location.toString(), Toast.LENGTH_LONG).show();
+            // Toast.makeText(getApplicationContext(), location.toString(), Toast.LENGTH_LONG).show();
         } else {
             locationStr = "122.0,33.0";
         }

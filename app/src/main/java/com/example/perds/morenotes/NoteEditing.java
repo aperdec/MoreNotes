@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.vision.text.Text;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class NoteEditing extends AppCompatActivity {
     private String action;
     private Note note;
     private TextView errorMessage;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +174,8 @@ public class NoteEditing extends AppCompatActivity {
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.RECORD_AUDIO, true);
         } else {
-            recordAudio(id + ".mpeg4");
+            //recordAudio(id);
+            recordAudio("test");
         }
 
     }
@@ -183,8 +186,8 @@ public class NoteEditing extends AppCompatActivity {
         values.put(MediaStore.MediaColumns.TITLE, fileName);
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
         try {
             recorder.prepare();
         } catch (Exception e) {
@@ -210,6 +213,7 @@ public class NoteEditing extends AppCompatActivity {
         });
         recorder.start();
         mProgressDialog.show();
+
     }
 
     public void saveNote(View view) {

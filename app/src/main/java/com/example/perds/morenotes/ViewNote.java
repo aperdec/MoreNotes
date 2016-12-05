@@ -29,7 +29,6 @@ public class ViewNote extends AppCompatActivity {
     private Note note;
     private static final int EDIT_NOTE = 1;
     private String filePath;
-    private MediaPlayer mp;
     private NotesDB notesDB;
 
     @Override
@@ -77,9 +76,9 @@ public class ViewNote extends AppCompatActivity {
 
     public void viewImg(View v){
         //loadImageFromStorage(filePath);
-        loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
+        //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
     }
-
+/*
     private void loadImageFromStorage(String path)
     {
         try {
@@ -92,19 +91,24 @@ public class ViewNote extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-    }
+    } */
 
     public void playMusic (View v) {
-        String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/12.mpeg4";
-
+        MediaPlayer mp = new MediaPlayer();
+        //String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/test.mp4";
+        String fileName = "test";
         //mediaPlayer.setDataSource(fileInputStream.getFD());
 
         try {
-            Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
-            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
+            //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
+            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
             //mp.setDataSource(fileInputStream.getFD());
-            mp.setDataSource(filePathMusic);
-            //player.prepare();
+            mp.reset();
+            mp.setDataSource(fileInputStream.getFD());
+            fileInputStream.close();
+            //mp.setDataSource(filePathMusic);
+
+            mp.prepare();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -113,6 +117,25 @@ public class ViewNote extends AppCompatActivity {
         }
 
         mp.start();
+    }
+
+    public void displayMap(View v){
+
+//        Intent i = new Intent();
+//        i.setClass(this, NoteEditing.class);
+//        i.putExtra("editNote", note);
+//        startActivityForResult(i, EDIT_NOTE);
+
+        Intent ii = new Intent();
+        ii.setClass(this,MapsActivity.class);
+        String location = note.getLocation();
+        String title = note.getTitle();
+
+        ii.putExtra("title", title);
+        ii.putExtra("location", location);
+
+        startActivity(ii);
+
     }
 
     @Override
