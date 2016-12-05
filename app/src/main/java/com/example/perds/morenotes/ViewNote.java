@@ -78,7 +78,8 @@ public class ViewNote extends AppCompatActivity {
     public void viewImg(View v){
         Intent pic = new Intent();
         pic.setClass(this, PictureView.class);
-        pic.putExtra("id", id);
+        String picId = note.getPicture();
+        pic.putExtra("picId", picId);
         startActivityForResult(pic, VIEW_PIC);
         //loadImageFromStorage(filePath);
         //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");

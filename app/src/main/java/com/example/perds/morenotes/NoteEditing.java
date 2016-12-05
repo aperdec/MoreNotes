@@ -77,7 +77,8 @@ public class NoteEditing extends AppCompatActivity {
         id = note.getId();
         location = note.getLocation();
         date = note.getDateCreated();
-        picture = note.getPicture();
+        //picture = note.getPicture();
+        picture = "pic"+note.getId()+".png";
         audio = note.getAudio();
 
         edtTitle.setText(note.getTitle());
@@ -124,7 +125,8 @@ public class NoteEditing extends AppCompatActivity {
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
-        File mypath = new File(directory, "profile.jpg");
+        //File mypath = new File(directory, note.getId() + ".jpg");
+        File mypath = new File(directory, picture);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
@@ -157,7 +159,8 @@ public class NoteEditing extends AppCompatActivity {
         if (camPic != null) {
             try {
                 System.out.print("camera working");
-                picture = saveToInternalStorage(camPic);
+                //picture = saveToInternalStorage(camPic);
+                saveToInternalStorage(camPic);
                 Log.i("file saved", picture + " it worked");
             } catch (Exception e) {
                 //save didn't work

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -15,7 +16,7 @@ public class PictureView extends AppCompatActivity {
 
     private Intent pic;
     private ImageView img;
-    private int id;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,20 +24,20 @@ public class PictureView extends AppCompatActivity {
         setContentView(R.layout.activity_picture_view);
         pic = getIntent();
 
-        id = pic.getIntExtra("id", 0);
-
+        id = pic.getStringExtra("picId");
         //img=(ImageView) findViewById(R.id.imageView2);
         loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
     }
 
-    public void closePic(){
+    public void closePic1(View v){
+
         finish();
     }
 
     private void loadImageFromStorage(String path)
     {
         try {
-            File f=new File(path, id+".jpg");
+            File f=new File(path, id);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             img =(ImageView)findViewById(R.id.imageView2);
             img.setImageBitmap(b);

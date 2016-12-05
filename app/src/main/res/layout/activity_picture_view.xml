@@ -14,20 +14,15 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:weightSum="1">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="417dp"
+            android:layout_height="match_parent"
             app:srcCompat="@drawable/cast_abc_scrubber_control_off_mtrl_alpha"
             android:id="@+id/imageView2" />
 
-        <Button
-            android:text="Close"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnClose"
-            android:onClick="closePic()"/>
     </LinearLayout>
 
 </RelativeLayout>
