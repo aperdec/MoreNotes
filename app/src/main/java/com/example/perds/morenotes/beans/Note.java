@@ -43,8 +43,8 @@ public class Note implements Parcelable {
         text = in.readString();
         location = in.readString();
         dateCreated = in.readString();
-        picture = in.readParcelable(Bitmap.class.getClassLoader());
-        audio = in.readParcelable(MediaStore.Audio.Media.class.getClassLoader());
+        picture = in.readString();
+        audio = in.readString();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -136,7 +136,7 @@ public class Note implements Parcelable {
         dest.writeString(text);
         dest.writeString(location);
         dest.writeString(dateCreated);
-        dest.writeValue(picture);
-        dest.writeValue(audio);
+        dest.writeString(picture);
+        dest.writeString(audio);
     }
 }

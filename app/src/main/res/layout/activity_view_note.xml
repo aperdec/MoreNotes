@@ -89,7 +89,7 @@
             android:ems="10"
             android:id="@+id/txtMessege"
             android:hint="Type Message Here"
-            android:layout_weight="0.83"
+            android:layout_weight="1.69"
             android:layout_height="wrap_content"
             android:editable="false"
             />
