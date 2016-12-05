@@ -1,6 +1,7 @@
 package com.example.perds.morenotes;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,12 +13,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
@@ -28,7 +34,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -44,11 +53,15 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private GoogleApiClient mGoogleApiClient;
 
     private ListView lstNotes;
+    private EditText edtSearch;
 
-    private List<Note> notes;
+    private ArrayList<Note> notes;
+    private ArrayList<Note> searchNotes;
     private NotesDB notesDB;
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
+    private Context context;
+    private Spinner sortBySpinner;
 
     LocationRequest mLocationRequest;
 
@@ -61,6 +74,28 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         locationStr = null;
         notesDB = new NotesDB(this);
         notes = new ArrayList<>();
+        searchNotes = new ArrayList<>();
+        context = this;
+
+        sortBySpinner = (Spinner) findViewById(R.id.sortBySpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sort_by_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        sortBySpinner.setAdapter(adapter);
+        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                notes = notesDB.getAllNotes();
+                MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(notes));
+                lstNotes.setAdapter(myArrayAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,6 +119,32 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             }
         });
 
+        edtSearch = (EditText) findViewById(R.id.search);
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    searchNotes = searchByTitle(s.toString());
+                    MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(searchNotes));
+                    lstNotes.setAdapter(myArrayAdapter);
+                } else {
+                    notes = notesDB.getAllNotes();
+                    MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(notes));
+                    lstNotes.setAdapter(myArrayAdapter);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         lstNotes = (ListView) findViewById(R.id.lstNotes);
         lstNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -99,18 +160,18 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         SharedPreferences settings = getSharedPreferences(NOTE_PREFS, MODE_PRIVATE);
         if (settings.contains(SETTINGS_PREFS_NOTES)) {
-            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, sortBy(notes));
 
             lstNotes.setAdapter(myArrayAdapter);
         } else {
-            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+            MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, sortBy(notes));
 
             lstNotes.setAdapter(myArrayAdapter);
         }
 
         // This is to load the database
         notes = notesDB.getAllNotes();
-        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, sortBy(notes));
         lstNotes.setAdapter(myArrayAdapter);
 
         //get address stuff
@@ -121,6 +182,18 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 .addOnConnectionFailedListener(this)
                 .build();
         connect();
+    }
+
+    private ArrayList<Note> searchByTitle(String s) {
+        searchNotes = new ArrayList<>();
+        for (Note n : notes) {
+            if (n.getTitle() != null) {
+                if (n.getTitle().contains(s)) {
+                    searchNotes.add(n);
+                }
+            }
+        }
+        return searchNotes;
     }
 
     public int getNoteId() {
@@ -186,7 +259,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             }
         }
         notes = notesDB.getAllNotes();
-        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, notes);
+        MyArrayAdapter myArrayAdapter = new MyArrayAdapter(this, R.layout.fragment_note_in_list, sortBy(notes));
         lstNotes.setAdapter(myArrayAdapter);
     }
 
@@ -305,6 +378,45 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public ArrayList<Note> sortBy(ArrayList<Note> array) {
+        String sortBy = sortBySpinner.getSelectedItem().toString();
+        switch (sortBy) {
+            case "A - Z" :
+                if (array.size() > 0) {
+                    Collections.sort(array, new Comparator<Note>() {
+                        @Override
+                        public int compare(final Note object1, final Note object2) {
+                            return object1.getTitle().compareTo(object2.getTitle());
+                        }
+                    });
+                }
+                break;
+            case "Z - A" :
+                if (array.size() > 0) {
+                    Collections.sort(array, new Comparator<Note>() {
+                        @Override
+                        public int compare(final Note object1, final Note object2) {
+                            return object2.getTitle().compareTo(object1.getTitle());
+                        }
+                    });
+                }
+                break;
+            case "Date" :
+                if (array.size() > 0) {
+                    Collections.sort(array, new Comparator<Note>() {
+                        @Override
+                        public int compare(final Note object1, final Note object2) {
+                            return object2.getDateCreated().compareTo(object1.getDateCreated());
+                        }
+                    });
+                }
+                break;
+            default:
+                break;
+        }
+        return array;
     }
 
 }
