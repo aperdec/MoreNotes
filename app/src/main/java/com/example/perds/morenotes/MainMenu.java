@@ -20,8 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
@@ -33,6 +35,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +60,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
     private Context context;
+    private Spinner sortBySpinner;
 
     LocationRequest mLocationRequest;
 
@@ -70,6 +75,12 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         notes = new ArrayList<>();
         searchNotes = new ArrayList<>();
         context = this;
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sort_by_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        sortBySpinner.setAdapter(adapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -348,6 +359,24 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public ArrayList sortBy(ArrayList array) {
+        String sortBy = sortBySpinner.getSelectedItem().toString();
+        ArrayList sortedArray = new ArrayList();
+        switch (sortBy) {
+            case "A - Z" :
+                Collections.sort(array, Comparator. String.CASE_INSENSITIVE_ORDER);
+                sortedArray = array;
+                break;
+            case "Z - A" :
+                Collections.sort(array, Collections.reverseOrder());
+                sortedArray = array;
+                break;
+            case "Date" :
+
+        }
+        return sortedArray;
     }
 
 }

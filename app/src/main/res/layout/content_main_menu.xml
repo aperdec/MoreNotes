@@ -33,6 +33,18 @@
             android:hint="Search" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sortBySpinner">
+
+        </Spinner>
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lstNotes"
         android:layout_width="match_parent"
