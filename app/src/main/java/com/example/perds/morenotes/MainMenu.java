@@ -61,7 +61,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
     private Context context;
-    private Spinner sortBySpinner;
+    private Spinner sortBySpinner, searchBySpinner;
 
     LocationRequest mLocationRequest;
 
@@ -89,6 +89,24 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 notes = notesDB.getAllNotes();
                 MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(notes));
                 lstNotes.setAdapter(myArrayAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        searchBySpinner = (Spinner) findViewById(R.id.searchBy);
+        adapter = ArrayAdapter.createFromResource(this, R.array.search_by_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        searchBySpinner.setAdapter(adapter);
+        searchBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                edtSearch.setText("");
             }
 
             @Override
@@ -129,9 +147,21 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    searchNotes = searchByTitle(s.toString());
-                    MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(searchNotes));
-                    lstNotes.setAdapter(myArrayAdapter);
+                    MyArrayAdapter myArrayAdapter;
+                    switch (searchBySpinner.getSelectedItem().toString()) {
+                        case "Text" :
+                            searchNotes = searchByText(s.toString());
+                            myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(searchNotes));
+                            lstNotes.setAdapter(myArrayAdapter);
+                            break;
+                        case "Title" :
+                            searchNotes = searchByTitle(s.toString());
+                            myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(searchNotes));
+                            lstNotes.setAdapter(myArrayAdapter);
+                            break;
+                        default :
+                            break;
+                    }
                 } else {
                     notes = notesDB.getAllNotes();
                     MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, sortBy(notes));
@@ -182,6 +212,18 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 .addOnConnectionFailedListener(this)
                 .build();
         connect();
+    }
+
+    private ArrayList<Note> searchByText(String s) {
+        searchNotes = new ArrayList<>();
+        for (Note n : notes) {
+            if (n.getText() != null) {
+                if (n.getText().contains(s)) {
+                    searchNotes.add(n);
+                }
+            }
+        }
+        return searchNotes;
     }
 
     private ArrayList<Note> searchByTitle(String s) {
