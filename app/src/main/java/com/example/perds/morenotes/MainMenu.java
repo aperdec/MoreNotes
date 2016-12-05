@@ -218,7 +218,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         searchNotes = new ArrayList<>();
         for (Note n : notes) {
             if (n.getText() != null) {
-                if (n.getText().contains(s)) {
+                if (n.getText().toLowerCase().contains(s.toLowerCase())) {
                     searchNotes.add(n);
                 }
             }
@@ -230,7 +230,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         searchNotes = new ArrayList<>();
         for (Note n : notes) {
             if (n.getTitle() != null) {
-                if (n.getTitle().contains(s)) {
+                if (n.getTitle().toLowerCase().contains(s.toLowerCase())) {
                     searchNotes.add(n);
                 }
             }
@@ -328,7 +328,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                     Manifest.permission.WRITE_EXTERNAL_STORAGE, true);
         } else {
             // Access to the location has been granted to the app.
-
         }
 
     }
@@ -368,7 +367,6 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         mGoogleApiClient.connect();
 
-
         if (mGoogleApiClient.isConnecting() == true) {
             //Toast.makeText(getApplicationContext(), "connecting", Toast.LENGTH_SHORT).show();
         } else if (mGoogleApiClient.isConnected() == true) {
@@ -376,10 +374,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
 
         } else {
             Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
-
         }
-
-
     }
 
     @Override
@@ -431,7 +426,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                     Collections.sort(array, new Comparator<Note>() {
                         @Override
                         public int compare(final Note object1, final Note object2) {
-                            return object1.getTitle().compareTo(object2.getTitle());
+                            return object1.getTitle().compareToIgnoreCase(object2.getTitle());
                         }
                     });
                 }
@@ -441,7 +436,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                     Collections.sort(array, new Comparator<Note>() {
                         @Override
                         public int compare(final Note object1, final Note object2) {
-                            return object2.getTitle().compareTo(object1.getTitle());
+                            return object2.getTitle().compareToIgnoreCase(object1.getTitle());
                         }
                     });
                 }
