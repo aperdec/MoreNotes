@@ -1,17 +1,20 @@
 package com.example.perds.morenotes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.perds.morenotes.beans.Note;
 import com.example.perds.morenotes.beans.NotesDB;
@@ -69,15 +72,18 @@ public class ViewNote extends AppCompatActivity {
         intent.setClass(this, NoteEditing.class);
         intent.putExtra("note", note);
         intent.putExtra("action", "update");
+        Toast.makeText(getApplicationContext(), "Edit Note",Toast.LENGTH_LONG).show();
         startActivityForResult(intent, EDIT_NOTE);
     }
 
     public void delNote(View v){
-        Intent intent = new Intent();
+        AlertDialog diaBox = AskOption();
+        diaBox.show();
+        /*Intent intent = new Intent();
         intent.putExtra("note", note);
         intent.putExtra("action", "delete");
         setResult(RESULT_OK, intent);
-        finish();
+        finish(); */
     }
 
     public void viewImg(View v){
@@ -85,6 +91,7 @@ public class ViewNote extends AppCompatActivity {
         pic.setClass(this, PictureView.class);
         String picId = note.getPicture();
         pic.putExtra("picId", picId);
+        Toast.makeText(getApplicationContext(), "View Image",Toast.LENGTH_LONG).show();
         startActivityForResult(pic, VIEW_PIC);
         //loadImageFromStorage(filePath);
         //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
@@ -113,12 +120,14 @@ public class ViewNote extends AppCompatActivity {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 playAudio.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
+                Toast.makeText(getApplicationContext(), "Play Audio",Toast.LENGTH_LONG).show();
             }
         });
 
         if (mp.isPlaying()) {
             mp.pause();
             playAudio.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
+            Toast.makeText(getApplicationContext(), "Audio Paused",Toast.LENGTH_LONG).show();
         } else {
             try {
                 //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
@@ -155,7 +164,7 @@ public class ViewNote extends AppCompatActivity {
         ii.setClass(this,MapsActivity.class);
         String location = note.getLocation();
         String title = note.getTitle();
-
+        Toast.makeText(getApplicationContext(), "View Map",Toast.LENGTH_LONG).show();
         ii.putExtra("title", title);
         ii.putExtra("location", location);
 
@@ -187,6 +196,42 @@ public class ViewNote extends AppCompatActivity {
         updateFields();
     }
 
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_black_24dp)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //deleting code
+                        Intent intent = new Intent();
+                        intent.putExtra("note", note);
+                        intent.putExtra("action", "delete");
+                        setResult(RESULT_OK, intent);
+                        finish();
+
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
 
 //    FloatingActionButton photo = (FloatingActionButton) findViewById(R.id.photo);
 

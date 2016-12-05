@@ -131,7 +131,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 intent.putExtra("note", newNote);
                 intent.putExtra("action", "save");
                 startActivityForResult(intent, NEW_NOTE);
-
+                Toast.makeText(getApplicationContext(), "Creating New Note",Toast.LENGTH_LONG).show();
                 connect();
 
             }
