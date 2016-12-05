@@ -53,7 +53,6 @@ public class NoteEditing extends AppCompatActivity {
     private String audio;
     private String action;
     private Note note;
-    private TextView errorMessage;
     private GoogleMap mMap;
 
     @Override
@@ -64,7 +63,6 @@ public class NoteEditing extends AppCompatActivity {
         edtTitle = (EditText) findViewById(R.id.editText);
         edtCategory = (Spinner) findViewById(R.id.spinner2);
         edtText = (EditText) findViewById(R.id.txtMessege);
-        errorMessage = (TextView) findViewById(R.id.errorText);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
