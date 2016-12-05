@@ -10,6 +10,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.perds.morenotes.NoteEditing">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/errorText"
+        android:visibility="gone" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -112,35 +118,33 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="1">
 
             <Button
                 android:text="Media"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnAudio"
-                android:onClick="play"/>
+                android:onClick="play"
+                android:layout_weight="0.32" />
 
             <Button
                 android:text="Picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnTakePic"
-                android:onClick="onClickCam"/>
+                android:onClick="onClickCam"
+                android:layout_weight="0.54" />
 
             <Button
                 android:text="Save Note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnEditText"
-                android:onClick="saveNote"/>
+                android:onClick="saveNote"
+                android:layout_weight="0.15" />
 
-            <Button
-                android:text="Map"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnMap"
-                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>
