@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
         <LinearLayout
@@ -42,14 +42,6 @@
             android:hint="Input Title Here"
             android:editable="false" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|clip_vertical|clip_horizontal"
-                android:layout_margin="@dimen/fab_margin"
-                app:srcCompat="@drawable/ic_mode_edit_black_24dp"
-                android:onClick="editNote"/>
         </LinearLayout>
 
     <LinearLayout
@@ -104,8 +96,9 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="380dp"
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -154,70 +147,70 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="134dp"
                     android:gravity="center"
-                    android:weightSum="1">
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="@dimen/fab_margin"
-                        app:srcCompat="@drawable/ic_assignment_ind_black_24dp"
-                        android:onClick="viewImg"
-                        android:layout_weight="0.09" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/audio"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="@dimen/fab_margin"
-                        app:srcCompat="@drawable/ic_play_circle_outline_black_24dp"
-                        android:onClick="playMusic"
-                        android:layout_weight="0.07" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/map"
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="@dimen/fab_margin"
-                        app:srcCompat="@drawable/ic_place_black_24dp"
-                        android:onClick=""
-                        android:layout_weight="0.11" />
+                    >
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/del"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom|end"
-                        android:layout_margin="@dimen/fab_margin"
-                        app:srcCompat="@drawable/ic_clear_black_24dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/ic_delete_black_24dp"
+                        android:layout_weight="1"
                         android:onClick="delNote"/>
 
-                    <Button
-                        android:text="Edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/photo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/ic_assignment_ind_black_24dp"
+                        android:layout_weight="1"
+                        android:onClick="viewImg"
+                        app:elevation="8dp" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/audio"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/ic_play_circle_outline_black_24dp"
+                        android:layout_weight="1"
+                        android:onClick="playMusic" />
+
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/btnMap"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/ic_place_black_24dp"
+                        android:onClick="displayMap"
+                        android:layout_weight="1" />
+
+                    <android.support.design.widget.FloatingActionButton
                         android:id="@+id/btnEdit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/ic_mode_edit_black_24dp"
                         android:layout_weight="1"
                         android:onClick="editNote"/>
 
-                    <Button
-                        android:text="Map"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btnMap"
-                        android:layout_weight="1"
-                        android:onClick="displayMap"
-                        />
+
                 </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
