@@ -386,6 +386,7 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     public void onStop() {
         super.onStop();
         mGoogleApiClient.disconnect();
+        Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_LONG).show();
     }
 
     @Override
