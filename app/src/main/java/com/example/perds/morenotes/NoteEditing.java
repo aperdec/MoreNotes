@@ -85,9 +85,11 @@ public class NoteEditing extends AppCompatActivity {
 
     private int matchSelected(String category) {
         String[] categories = this.getResources().getStringArray(R.array.planets_array);
-        for (int i = 0; i < categories.length; i++) {
-            if (category.equals(categories[i])) {
-                return i;
+        if (category != null) {
+            for (int i = 0; i < categories.length; i++) {
+                if (category.equals(categories[i])) {
+                    return i;
+                }
             }
         }
         return 0;
@@ -211,6 +213,7 @@ public class NoteEditing extends AppCompatActivity {
     }
 
     public void saveNote(View view) {
+        boolean error = false;
         Intent intent = new Intent();
         Note note = new Note();
         note.setId(id);
@@ -218,33 +221,19 @@ public class NoteEditing extends AppCompatActivity {
         note.setDateCreated(date);
         note.setPicture(picture);
         note.setAudio(audio);
-        if (edtTitle.getText() != null) {
-            note.setTitle(edtTitle.getText().toString());
-        } else {
-            errorMessage.setVisibility(View.VISIBLE);
-            errorMessage.setText("Please Enter Title");
-        }
-        if (edtCategory.getSelectedItem() != null) {
-            note.setCategory(edtCategory.getSelectedItem().toString());
-        } else {
-            errorMessage.setVisibility(View.VISIBLE);
-            errorMessage.setText("Please Select Category");
-        }
-        if (edtText.getText() != null) {
-            note.setText(edtText.getText().toString());
-        } else {
-            errorMessage.setVisibility(View.VISIBLE);
-            errorMessage.setText("Please Enter Text");
-        }
+        note.setTitle(edtTitle.getText().toString());
+        note.setCategory(edtCategory.getSelectedItem().toString());
+        note.setText(edtText.getText().toString());
+
         intent.putExtra("note", note);
         intent.putExtra("action", action);
         setResult(RESULT_OK, intent);
         finish();
     }
 
-    public void displayMap(String location){
+    public void displayMap(String location) {
         Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra("location",location);
+        intent.putExtra("location", location);
 
     }
 
