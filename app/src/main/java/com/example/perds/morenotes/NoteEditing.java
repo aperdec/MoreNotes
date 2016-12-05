@@ -175,19 +175,20 @@ public class NoteEditing extends AppCompatActivity {
                     Manifest.permission.RECORD_AUDIO, true);
         } else {
             //recordAudio(id);
-            recordAudio(audio);
+            recordAudio();
         }
 
     }
 
-    public void recordAudio(String fileName) {
+    public void recordAudio() {
+        audio = audio + new Date().toString();
         final MediaRecorder recorder = new MediaRecorder();
         ContentValues values = new ContentValues(3);
-        values.put(MediaStore.MediaColumns.TITLE, fileName);
+        values.put(MediaStore.MediaColumns.TITLE, audio);
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
+        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + audio);
         try {
             recorder.prepare();
         } catch (Exception e) {
