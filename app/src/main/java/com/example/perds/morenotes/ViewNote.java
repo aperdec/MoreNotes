@@ -27,11 +27,13 @@ public class ViewNote extends AppCompatActivity {
     private TextView loc;
     private TextView date;
     private TextView cat;
+    private FloatingActionButton playAudio;
     private Note note;
     private static final int EDIT_NOTE = 1;
     private static final int VIEW_PIC = 33;
     private String filePath;
     private NotesDB notesDB;
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +41,14 @@ public class ViewNote extends AppCompatActivity {
         setContentView(R.layout.activity_view_note);
 
         notesDB = new NotesDB(this);
+        mp = new MediaPlayer();
 
         title = (TextView) findViewById(R.id.txtTitle);
         message = (TextView) findViewById(R.id.txtMessege);
         loc  = (TextView) findViewById(R.id.txtLocation);
         date  = (TextView) findViewById(R.id.txtDate);
         cat  = (TextView) findViewById(R.id.txtCategory);
+        playAudio = (FloatingActionButton) findViewById(R.id.audio);
 
         Intent intent = getIntent();
         note = intent.getParcelableExtra("note");
@@ -101,30 +105,44 @@ public class ViewNote extends AppCompatActivity {
     } */
 
     public void playMusic (View v) {
-        MediaPlayer mp = new MediaPlayer();
         //String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/test.mp4";
         String fileName = note.getAudio();
         //mediaPlayer.setDataSource(fileInputStream.getFD());
 
-        try {
-            //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
-            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
-            //mp.setDataSource(fileInputStream.getFD());
-            mp.reset();
-            mp.setDataSource(fileInputStream.getFD());
-            fileInputStream.close();
-            //mp.setDataSource(filePathMusic);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playAudio.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
+            }
+        });
 
-            mp.prepare();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Exception of type : " + e.toString());
-            e.printStackTrace();
+        if (mp.isPlaying()) {
+            mp.pause();
+            playAudio.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
+        } else {
+            try {
+                //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
+                FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
+                //mp.setDataSource(fileInputStream.getFD());
+                mp.reset();
+                mp.setDataSource(fileInputStream.getFD());
+                fileInputStream.close();
+                //mp.setDataSource(filePathMusic);
+
+                mp.prepare();
+                playAudio.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.out.println("Exception of type : " + e.toString());
+                e.printStackTrace();
+            }
+
+            mp.start();
         }
-
-        mp.start();
     }
+
+
 
     public void displayMap(View v){
 
