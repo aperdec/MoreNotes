@@ -79,7 +79,7 @@ public class NoteEditing extends AppCompatActivity {
         date = note.getDateCreated();
         //picture = note.getPicture();
         picture = "pic"+note.getId()+".png";
-        audio = note.getAudio();
+        audio = "audio"+note.getAudio()+".mp4";
 
         edtTitle.setText(note.getTitle());
         edtCategory.setSelection(matchSelected(note.getCategory()));
@@ -178,7 +178,7 @@ public class NoteEditing extends AppCompatActivity {
                     Manifest.permission.RECORD_AUDIO, true);
         } else {
             //recordAudio(id);
-            recordAudio("test");
+            recordAudio(audio);
         }
 
     }
@@ -190,7 +190,7 @@ public class NoteEditing extends AppCompatActivity {
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
+        recorder.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
         try {
             recorder.prepare();
         } catch (Exception e) {

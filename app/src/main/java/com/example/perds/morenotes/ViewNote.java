@@ -103,12 +103,12 @@ public class ViewNote extends AppCompatActivity {
     public void playMusic (View v) {
         MediaPlayer mp = new MediaPlayer();
         //String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/test.mp4";
-        String fileName = "test";
+        String fileName = note.getAudio();
         //mediaPlayer.setDataSource(fileInputStream.getFD());
 
         try {
             //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
-            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
+            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName);
             //mp.setDataSource(fileInputStream.getFD());
             mp.reset();
             mp.setDataSource(fileInputStream.getFD());
