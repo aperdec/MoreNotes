@@ -197,7 +197,22 @@
                         app:srcCompat="@drawable/ic_clear_black_24dp"
                         android:onClick="delNote"/>
 
+                    <Button
+                        android:text="Edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnEdit"
+                        android:layout_weight="1"
+                        android:onClick="editNote"/>
 
+                    <Button
+                        android:text="Map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnMap"
+                        android:layout_weight="1"
+                        android:onClick="displayMap"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
