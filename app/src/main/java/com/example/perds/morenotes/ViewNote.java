@@ -29,7 +29,6 @@ public class ViewNote extends AppCompatActivity {
     private Note note;
     private static final int EDIT_NOTE = 1;
     private String filePath;
-    private MediaPlayer mp;
     private NotesDB notesDB;
 
     @Override
@@ -95,16 +94,21 @@ public class ViewNote extends AppCompatActivity {
     }
 
     public void playMusic (View v) {
-        String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/12.mpeg4";
-
+        MediaPlayer mp = new MediaPlayer();
+        //String filePathMusic = Environment.getExternalStorageDirectory().getAbsolutePath()+"app_imageDir/test.mp4";
+        String fileName = "test";
         //mediaPlayer.setDataSource(fileInputStream.getFD());
 
         try {
-            Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
-            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/12.mpeg4");
+            //Runtime.getRuntime().exec("chmod 777 /data/data/com.example.perds.morenotes/app_imageDir/test.mp4");
+            FileInputStream fileInputStream = new FileInputStream("/data/data/com.example.perds.morenotes/app_imageDir/" + fileName  + ".mp4");
             //mp.setDataSource(fileInputStream.getFD());
-            mp.setDataSource(filePathMusic);
-            //player.prepare();
+            mp.reset();
+            mp.setDataSource(fileInputStream.getFD());
+            fileInputStream.close();
+            //mp.setDataSource(filePathMusic);
+
+            mp.prepare();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (Exception e) {
