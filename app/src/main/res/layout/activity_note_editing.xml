@@ -141,7 +141,7 @@
                 android:layout_margin="5dp"
                 app:srcCompat="@drawable/ic_image_black_24dp"
                 android:layout_weight="1"
-                android:onClick=""/>
+                android:onClick="getImg"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/btnAudio"
