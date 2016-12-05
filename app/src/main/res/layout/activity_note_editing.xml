@@ -120,7 +120,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:gravity="center_horizontal|bottom"
-            android:onClick=""
+            android:onClick="addAudio"
             app:srcCompat="@drawable/mr_ic_audiotrack_light" />
 
         <android.support.design.widget.FloatingActionButton

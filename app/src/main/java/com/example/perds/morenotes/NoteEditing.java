@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -186,6 +187,24 @@ public class NoteEditing extends AppCompatActivity {
                         }
                     }
                 }
+                break;
+            case 19:
+            if(requestCode == 1){
+
+                if(resultCode == RESULT_OK){
+                    MediaPlayer mp1 = new MediaPlayer();
+                    //the selected audio.
+                    Uri uri = data.getData();
+                    try{
+                    mp1.setDataSource(this, uri);
+                       // mp1.setOutputFile("/data/data/com.example.perds.morenotes/app_imageDir/" + audio);
+                    } catch (Exception e) {
+                        //save didn't work
+                        Log.i("fail", "failure");
+                    }
+                }
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -218,6 +237,15 @@ public class NoteEditing extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(pickPhoto,
                     "Choose an image!"), TAKE_AVATAR_GALLERY_REQUEST);
         }
+    }
+
+    //add audio file
+    public void addAudio(View v){
+        Intent intent_upload = new Intent();
+        intent_upload.setType("audio/*");
+        intent_upload.setAction(Intent.ACTION_GET_CONTENT);
+        Toast.makeText(getApplicationContext(), "Add Audio File.",Toast.LENGTH_LONG).show();
+        startActivityForResult(intent_upload,19);
     }
 
     //audio coding
