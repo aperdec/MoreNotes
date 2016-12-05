@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
+import com.google.android.gms.maps.GoogleMap;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +48,9 @@ public class NoteEditing extends AppCompatActivity {
     private String picture;
     private String audio;
     private String action;
+    private GoogleMap mMap;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

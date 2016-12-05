@@ -107,4 +107,25 @@ public class ViewNote extends AppCompatActivity {
         ;
         mp.start();
     }
+
+    public void displayMap(View v){
+
+//        Intent i = new Intent();
+//        i.setClass(this, NoteEditing.class);
+//        i.putExtra("editNote", note);
+//        startActivityForResult(i, EDIT_NOTE);
+
+        Intent ii = new Intent();
+        ii.setClass(this,MapsActivity.class);
+        String location = note.getLocation();
+        String title = note.getTitle();
+
+        ii.putExtra("title", title);
+        ii.putExtra("location", location);
+
+        startActivity(ii);
+
+    }
+
+
 }
