@@ -5,6 +5,8 @@
     android:id="@+id/content_main_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -12,38 +14,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.perds.morenotes.MainMenu"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     tools:showIn="@layout/activity_main_menu">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <ImageView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_search_black_24dp"/>
+            app:srcCompat="@drawable/ic_search_black_24dp" />
+
         <EditText
             android:id="@+id/search"
             android:layout_width="0dp"
-            android:layout_weight="16"
             android:layout_height="wrap_content"
+            android:layout_weight="16"
             android:hint="Search" />
     </LinearLayout>
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/sortBySpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sortBySpinner">
+        android:layout_height="wrap_content">
 
-        </Spinner>
-    </LinearLayout>
+    </Spinner>
 
     <ListView
         android:id="@+id/lstNotes"
