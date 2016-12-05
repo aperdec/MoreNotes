@@ -168,7 +168,8 @@
                         android:text="Play Audio"
                         android:layout_width="169dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btnAudio" />
+                        android:id="@+id/btnAudio"
+                        android:onClick="playMusic"/>
                 </LinearLayout>
 
                 <LinearLayout
