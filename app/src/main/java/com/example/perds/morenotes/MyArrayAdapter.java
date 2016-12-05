@@ -2,6 +2,8 @@ package com.example.perds.morenotes;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -33,16 +38,10 @@ public class MyArrayAdapter extends ArrayAdapter<Note> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Inflate convertView if it is null
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         if (convertView == null) {
             convertView = inflater.inflate(resourceId, parent, false);
         }
-
-        ImageView imgNote = (ImageView) convertView.findViewById(R.id.imgNote);
-
-        int noteResourceId = notes.get(position).getId();
-
-//        imgNote.setImageResource(noteResourceId);
 
         TextView txtnote = (TextView) convertView.findViewById(R.id.txtTitle);
         // set the text
