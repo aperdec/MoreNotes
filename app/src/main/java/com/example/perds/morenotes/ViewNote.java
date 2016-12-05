@@ -76,9 +76,9 @@ public class ViewNote extends AppCompatActivity {
 
     public void viewImg(View v){
         //loadImageFromStorage(filePath);
-        loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
+        //loadImageFromStorage("/data/data/com.example.perds.morenotes/app_imageDir");
     }
-
+/*
     private void loadImageFromStorage(String path)
     {
         try {
@@ -91,7 +91,7 @@ public class ViewNote extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-    }
+    } */
 
     public void playMusic (View v) {
         MediaPlayer mp = new MediaPlayer();
