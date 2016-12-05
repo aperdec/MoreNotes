@@ -7,11 +7,13 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
+import com.example.perds.morenotes.beans.NotesDB;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,15 +27,16 @@ public class ViewNote extends AppCompatActivity {
     private TextView date;
     private TextView cat;
     private Note note;
-    private Intent intent;
     private static final int EDIT_NOTE = 1;
     private String filePath;
-    //private MediaPlayer mp;
+    private NotesDB notesDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_note);
+
+        notesDB = new NotesDB(this);
 
         title = (TextView) findViewById(R.id.txtTitle);
         message = (TextView) findViewById(R.id.txtMessege);
@@ -41,22 +44,26 @@ public class ViewNote extends AppCompatActivity {
         date  = (TextView) findViewById(R.id.txtDate);
         cat  = (TextView) findViewById(R.id.txtCategory);
 
-        intent = getIntent();
+        Intent intent = getIntent();
         note = intent.getParcelableExtra("note");
+        updateFields();
+    }
+
+    public void updateFields() {
         title.setText(note.getTitle());
         message.setText(note.getText());
         loc.setText(note.getLocation());
         date.setText(note.getDateCreated());
         cat.setText(note.getCategory());
         filePath = note.getPicture();
-
     }
 
     public void editNote(View v){
-        Intent i = new Intent();
-        i.setClass(this, NoteEditing.class);
-        i.putExtra("editNote", note);
-        startActivityForResult(i, EDIT_NOTE);
+        Intent intent = new Intent();
+        intent.setClass(this, NoteEditing.class);
+        intent.putExtra("note", note);
+        intent.putExtra("action", "update");
+        startActivityForResult(intent, EDIT_NOTE);
     }
 
     public void delNote(View v){
@@ -108,6 +115,31 @@ public class ViewNote extends AppCompatActivity {
             System.out.println("Exception of type : " + e.toString());
             e.printStackTrace();
         }
+
         mp.start();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Activity Result", "Request Code:" + requestCode + ", Result Code:" + resultCode);
+
+        if (requestCode == EDIT_NOTE) {
+            if (resultCode == RESULT_OK) {
+                String action = data.getStringExtra("action");
+                note = data.getParcelableExtra("note");
+                switch (action) {
+                    case "update":
+                        Log.i("Update", "Note " + note.getId() + " is being updated");
+                        notesDB.updateNoteById(note);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                Log.i("Canceled", "The activity has returned with a cancel result code");
+            }
+        }
+        updateFields();
     }
 }
