@@ -161,7 +161,7 @@
                 android:layout_margin="5dp"
                 app:srcCompat="@drawable/mr_ic_audiotrack_light"
                 android:layout_weight="1"
-                android:onClick=""/>
+                android:onClick="addAudio"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/btnEditText"
