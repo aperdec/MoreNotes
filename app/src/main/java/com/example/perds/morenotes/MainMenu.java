@@ -1,6 +1,7 @@
 package com.example.perds.morenotes;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,11 +13,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,11 +48,14 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
     private GoogleApiClient mGoogleApiClient;
 
     private ListView lstNotes;
+    private EditText edtSearch;
 
     private List<Note> notes;
+    private List<Note> searchNotes;
     private NotesDB notesDB;
     private GoogleMap mMap;
     private boolean mPermissionDenied = false;
+    private Context context;
 
     LocationRequest mLocationRequest;
 
@@ -61,6 +68,8 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
         locationStr = null;
         notesDB = new NotesDB(this);
         notes = new ArrayList<>();
+        searchNotes = new ArrayList<>();
+        context = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,6 +89,32 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 startActivityForResult(intent, NEW_NOTE);
 
                 connect();
+
+            }
+        });
+
+        edtSearch = (EditText) findViewById(R.id.search);
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    searchNotes = searchByTitle(s.toString());
+                    MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, searchNotes);
+                    lstNotes.setAdapter(myArrayAdapter);
+                } else {
+                    notes = notesDB.getAllNotes();
+                    MyArrayAdapter myArrayAdapter = new MyArrayAdapter(context, R.layout.fragment_note_in_list, notes);
+                    lstNotes.setAdapter(myArrayAdapter);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -121,6 +156,18 @@ public class MainMenu extends AppCompatActivity implements GoogleApiClient.Conne
                 .addOnConnectionFailedListener(this)
                 .build();
         connect();
+    }
+
+    private List<Note> searchByTitle(String s) {
+        searchNotes = new ArrayList<>();
+        for (Note n : notes) {
+            if (n.getTitle() != null) {
+                if (n.getTitle().contains(s)) {
+                    searchNotes.add(n);
+                }
+            }
+        }
+        return searchNotes;
     }
 
     public int getNoteId() {
