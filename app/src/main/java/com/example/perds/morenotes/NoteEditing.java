@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.perds.morenotes.beans.Note;
+import com.google.android.gms.vision.text.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,25 +48,18 @@ public class NoteEditing extends AppCompatActivity {
     private String picture;
     private String audio;
     private String action;
+    private Note note;
+    private TextView errorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editing);
 
-        Intent intent = getIntent();
-        Note note = intent.getParcelableExtra("note");
-        action = intent.getStringExtra("action");
-
-
-
-        id = note.getId();
-        location = note.getLocation();
-        date = note.getDateCreated();
-
         edtTitle = (EditText) findViewById(R.id.editText);
         edtCategory = (Spinner) findViewById(R.id.spinner2);
         edtText = (EditText) findViewById(R.id.txtMessege);
+        errorMessage = (TextView) findViewById(R.id.errorText);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
@@ -73,6 +67,30 @@ public class NoteEditing extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         edtCategory.setAdapter(adapter);
+
+        Intent intent = getIntent();
+        note = intent.getParcelableExtra("note");
+        action = intent.getStringExtra("action");
+
+        id = note.getId();
+        location = note.getLocation();
+        date = note.getDateCreated();
+        picture = note.getPicture();
+        audio = note.getAudio();
+
+        edtTitle.setText(note.getTitle());
+        edtCategory.setSelection(matchSelected(note.getCategory()));
+        edtText.setText(note.getText());
+    }
+
+    private int matchSelected(String category) {
+        String[] categories = this.getResources().getStringArray(R.array.planets_array);
+        for (int i = 0; i < categories.length; i++) {
+            if (category.equals(categories[i])) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     //camera code
@@ -121,7 +139,6 @@ public class NoteEditing extends AppCompatActivity {
     }
 
     //takes the response from the camera -- if working the result will have an img
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TAKE_AVATAR_CAMERA_REQUEST:
@@ -203,12 +220,21 @@ public class NoteEditing extends AppCompatActivity {
         note.setAudio(audio);
         if (edtTitle.getText() != null) {
             note.setTitle(edtTitle.getText().toString());
+        } else {
+            errorMessage.setVisibility(View.VISIBLE);
+            errorMessage.setText("Please Enter Title");
         }
         if (edtCategory.getSelectedItem() != null) {
             note.setCategory(edtCategory.getSelectedItem().toString());
+        } else {
+            errorMessage.setVisibility(View.VISIBLE);
+            errorMessage.setText("Please Select Category");
         }
         if (edtText.getText() != null) {
             note.setText(edtText.getText().toString());
+        } else {
+            errorMessage.setVisibility(View.VISIBLE);
+            errorMessage.setText("Please Enter Text");
         }
         intent.putExtra("note", note);
         intent.putExtra("action", action);
